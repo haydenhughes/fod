@@ -1,0 +1,36 @@
+{% extends "base" %}
+
+
+{% block body %}
+  {% include "nav" %}
+
+  <section class="section">
+    <div class="container">
+      <h1 class="title has-text-centered">
+        Inventory
+      </h1>
+      <div class="level">
+        <div class="level-item">
+          <table class="table is-bordered is-striped is-fullwidth is-hoverable">
+            <thead>
+              <th>Current Qty</th>
+              <th>Required Qty</th>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Notes</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>100</td>
+                <td>hello</td>
+                <td>$0.00</td>
+                <td>Need to buy more</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
