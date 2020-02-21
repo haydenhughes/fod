@@ -1,0 +1,8 @@
+[global]
+address = "localhost"
+port = 8000
+log = "normal"
+# secret_key = "ff48ce376f0ed5f64d2e9d0cd0758ccb"
+
+[global.databases.fodmap]
+url = "postgres://postgres:password@localhost/fodmap"
