@@ -1,32 +1,123 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-#[macro_use]
 extern crate rocket;
-extern crate bcrypt;
 #[macro_use]
 extern crate rocket_contrib;
 #[macro_use]
+extern crate rocket_codegen;
+#[macro_use]
 extern crate diesel;
+extern crate bcrypt;
+extern crate clap;
+extern crate rpassword;
 
-mod form;
-mod models;
 mod routes;
 mod schema;
+mod users;
 
+use clap::{App, AppSettings, Arg, SubCommand};
+use diesel::pg::PgConnection;
+use diesel::prelude::*;
+use dotenv::dotenv;
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
+use std::{env, io};
+use users::models::User;
+use users::NewUser;
+use rpassword::read_password_from_tty;
 
 #[database("fodmap")]
 pub struct FodMapDatabase(diesel::PgConnection);
 
-fn main() {
-    rocket::ignite()
-        .mount("/", routes![routes::index, routes::login])
-        .mount(
-            "/static",
-            StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")),
+pub fn establish_connection() -> PgConnection {
+    dotenv().ok();
+
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
+}
+
+fn main() -> io::Result<()> {
+    let matches = App::new("FodMap")
+        .version("0.1.0")
+        .author("Hayden Hughes <hayden@firemail.cc>")
+        .about("Self-hosted pantry inventory system")
+        .setting(AppSettings::SubcommandRequiredElseHelp)
+        .subcommand(SubCommand::with_name("server").about("Run web server"))
+        .subcommand(
+            SubCommand::with_name("adduser")
+                .about("Add a user account")
+                .long_about("Requires the DATABASE_URL environment vairable to be set")
+                .arg(
+                    Arg::with_name("USERNAME")
+                        .help("Sets the username for the new user")
+                        .required(true),
+                ),
         )
-        .attach(Template::fairing())
-        .attach(FodMapDatabase::fairing())
-        .launch();
+        .subcommand(
+            SubCommand::with_name("deluser")
+                .about("Delete a user account")
+                .long_about("Requires the DATABASE_URL environment vairable to be set")
+                .arg(
+                    Arg::with_name("USERNAME")
+                        .help("Secify the username of the user to delete")
+                        .required(true),
+                ),
+        )
+        .get_matches();
+
+    if matches.is_present("server") {
+        rocket::ignite()
+            .mount(
+                "/",
+                routes![
+                    routes::index,
+                    users::routes::login,
+                    users::routes::user_login
+                ],
+            )
+            .mount(
+                "/static",
+                StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")),
+            )
+            .attach(Template::fairing())
+            .attach(FodMapDatabase::fairing())
+            .launch();
+    }
+
+    if matches.is_present("adduser") {
+        let conn = establish_connection();
+
+        let username = matches
+            .subcommand_matches("adduser")
+            .unwrap()
+            .value_of("USERNAME")
+            .unwrap();
+
+        let password = read_password_from_tty(Some("Password: "))?;
+
+        let new_user =
+            NewUser::new(username, password.as_str()).expect("Error creating new user");
+
+        diesel::insert_into(schema::users::table)
+            .values(&new_user)
+            .execute(&conn)
+            .expect("Error saving new user");
+    }
+
+    if matches.is_present("deluser") {
+        let conn = establish_connection();
+
+        let username = matches
+            .subcommand_matches("deluser")
+            .unwrap()
+            .value_of("USERNAME")
+            .unwrap();
+
+        diesel::delete(schema::users::table)
+            .filter(User::with_name(username))
+            .execute(&conn)
+            .expect("Error deleting new user");
+    }
+
+    Ok(())
 }
