@@ -6,6 +6,7 @@ use crate::FodMapDatabase;
 use context::LoginContext;
 use diesel::prelude::*;
 use rocket::http::Status;
+use rocket::http::{Cookie, Cookies};
 use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket_contrib::templates::Template;
@@ -17,7 +18,11 @@ pub fn login(failed: Option<bool>) -> Template {
 }
 
 #[post("/login", data = "<request>")]
-pub fn user_login(conn: FodMapDatabase, request: Form<NewUser>) -> Result<Redirect, Status> {
+pub fn user_login(
+    conn: FodMapDatabase,
+    mut cookies: Cookies,
+    request: Form<NewUser>,
+) -> Result<Redirect, Status> {
     let user: Result<User, diesel::result::Error> =
         User::by_username(request.username.as_str()).first(&conn.0);
 
@@ -25,6 +30,7 @@ pub fn user_login(conn: FodMapDatabase, request: Form<NewUser>) -> Result<Redire
         Ok(user) => match user.check_password(&request.password) {
             Ok(b) => {
                 if b {
+                    cookies.add_private(Cookie::new("user_id", user.id.to_string()));
                     return Ok(Redirect::to(uri!(crate::routes::index)));
                 } else {
                     return Ok(Redirect::to(uri!(login: failed = true)));

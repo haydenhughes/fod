@@ -114,7 +114,7 @@ fn main() -> io::Result<()> {
             .unwrap();
 
         diesel::delete(schema::users::table)
-            .filter(User::with_name(username))
+            .filter(User::with_username(username))
             .execute(&conn)
             .expect("Error deleting new user");
     }
