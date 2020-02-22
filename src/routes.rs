@@ -1,4 +1,4 @@
-use crate::users::User;
+use crate::auth::User;
 use rocket::response::Redirect;
 use rocket_contrib::templates::Template;
 use std::collections::HashMap;
@@ -14,7 +14,7 @@ pub fn gen_response<T: serde::Serialize>(
 ) -> Response {
     user.as_ref()
         .ok_or(Redirect::to(uri!(
-            crate::users::routes::login: failed = false
+            crate::auth::routes::login: failed = false
         )))
         .and(Ok(Template::render(template, context)))
 }

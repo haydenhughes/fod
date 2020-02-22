@@ -14,7 +14,7 @@ extern crate serde;
 
 mod routes;
 mod schema;
-mod users;
+mod auth;
 
 use clap::{App, AppSettings, Arg, SubCommand};
 use diesel::pg::PgConnection;
@@ -24,8 +24,8 @@ use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
 use rpassword::read_password_from_tty;
 use std::{env, io};
-use users::NewUser;
-use users::User;
+use auth::NewUser;
+use auth::User;
 
 #[database("fodmap")]
 pub struct FodMapDatabase(diesel::PgConnection);
@@ -72,8 +72,8 @@ fn main() -> io::Result<()> {
                 "/",
                 routes![
                     routes::index,
-                    users::routes::login,
-                    users::routes::user_login
+                    auth::routes::login,
+                    auth::routes::user_login
                 ],
             )
             .mount(
