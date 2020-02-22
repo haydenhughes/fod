@@ -3,18 +3,19 @@ pub mod routes;
 use crate::schema::users;
 use crate::FodMapDatabase;
 use bcrypt::{hash, verify, BcryptError, DEFAULT_COST};
-use diesel::dsl::Eq;
-use diesel::dsl::{Filter, Select};
+use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use rocket::request::{FromRequest, Outcome, Request};
 
 type AllColumns = (users::id, users::username, users::password);
 
 type All = Select<users::table, AllColumns>;
-type WithUserName<'a> = Eq<users::username, &'a str>;
-type ByUserName<'a> = Filter<All, WithUserName<'a>>;
+
 type WithID<'a> = Eq<users::id, &'a i32>;
 type ByID<'a> = Filter<All, WithID<'a>>;
+
+type WithUserName<'a> = Eq<users::username, &'a str>;
+type ByUserName<'a> = Filter<All, WithUserName<'a>>;
 
 #[derive(FromForm, Insertable)]
 #[table_name = "users"]

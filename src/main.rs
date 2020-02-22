@@ -15,6 +15,7 @@ extern crate serde;
 mod routes;
 mod schema;
 mod auth;
+mod models;
 
 use clap::{App, AppSettings, Arg, SubCommand};
 use diesel::pg::PgConnection;
