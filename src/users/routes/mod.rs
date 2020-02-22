@@ -1,14 +1,14 @@
 mod context;
 
-use super::models::User;
 use super::NewUser;
+use super::User;
 use crate::FodMapDatabase;
+use context::LoginContext;
 use diesel::prelude::*;
 use rocket::http::Status;
 use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket_contrib::templates::Template;
-use context::LoginContext;
 
 #[get("/login?<failed>")]
 pub fn login(failed: Option<bool>) -> Template {

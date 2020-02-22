@@ -22,10 +22,10 @@ use diesel::prelude::*;
 use dotenv::dotenv;
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
-use std::{env, io};
-use users::models::User;
-use users::NewUser;
 use rpassword::read_password_from_tty;
+use std::{env, io};
+use users::NewUser;
+use users::User;
 
 #[database("fodmap")]
 pub struct FodMapDatabase(diesel::PgConnection);
@@ -96,8 +96,7 @@ fn main() -> io::Result<()> {
 
         let password = read_password_from_tty(Some("Password: "))?;
 
-        let new_user =
-            NewUser::new(username, password.as_str()).expect("Error creating new user");
+        let new_user = NewUser::new(username, password.as_str()).expect("Error creating new user");
 
         diesel::insert_into(schema::users::table)
             .values(&new_user)
