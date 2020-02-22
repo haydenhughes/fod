@@ -8,11 +8,11 @@ use rocket::http::Status;
 use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket_contrib::templates::Template;
-use std::collections::HashMap;
+use context::LoginContext;
 
-#[get("/login")]
-pub fn login() -> Template {
-    let context: HashMap<String, String> = HashMap::new();
+#[get("/login?<failed>")]
+pub fn login(failed: Option<bool>) -> Template {
+    let context = LoginContext::new(failed.unwrap_or(false));
     Template::render("login", &context)
 }
 
@@ -27,13 +27,13 @@ pub fn user_login(conn: FodMapDatabase, request: Form<NewUser>) -> Result<Redire
                 if b {
                     return Ok(Redirect::to(uri!(crate::routes::index)));
                 } else {
-                    return Ok(Redirect::to(uri!(login)));
+                    return Ok(Redirect::to(uri!(login: failed = true)));
                 }
             }
             // FIXME: Actually return a helpful error
             Err(_) => Err(Status::InternalServerError),
         },
-        Err(diesel::result::Error::NotFound) => Ok(Redirect::to(uri!(login))),
+        Err(diesel::result::Error::NotFound) => Ok(Redirect::to(uri!(login: failed = true))),
         Err(_) => Err(Status::InternalServerError),
     }
 }

@@ -10,6 +10,7 @@ extern crate diesel;
 extern crate bcrypt;
 extern crate clap;
 extern crate rpassword;
+extern crate serde;
 
 mod routes;
 mod schema;
