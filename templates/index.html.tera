@@ -20,13 +20,15 @@
               <th>Notes</th>
             </thead>
             <tbody>
+              {% for item in items %}
               <tr>
-                <td>1</td>
-                <td>100</td>
-                <td>hello</td>
-                <td>$0.00</td>
-                <td>Need to buy more</td>
+                <td>{{ item.qty }}</td>
+                <td>{{ item.req_qty }}</td>
+                <td>{{ item.name }}</td>
+                <td>${{ item.price }}</td>
+                <td>{{ item.notes }}</td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>

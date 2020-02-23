@@ -1,7 +1,12 @@
+mod context;
+
 use crate::auth::User;
+use crate::models::Item;
+use crate::FodMapDatabase;
+use context::IndexContext;
+use diesel::prelude::*;
 use rocket::response::Redirect;
 use rocket_contrib::templates::Template;
-use std::collections::HashMap;
 
 type Response = Result<Template, Redirect>;
 type Auth = Option<User>;
@@ -20,8 +25,9 @@ pub fn gen_response<T: serde::Serialize>(
 }
 
 #[get("/")]
-pub fn index(user: Auth) -> Response {
-    let context: HashMap<String, String> = HashMap::new();
-
-    gen_response("index", &user, &context)
+pub fn index(conn: FodMapDatabase, user: Auth) -> Result<Response, diesel::result::Error> {
+    Item::all()
+        .get_results(&conn.0)
+        .map(|items| IndexContext::new(items))
+        .and_then(|context| Ok(gen_response("index", &user, &context)))
 }

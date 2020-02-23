@@ -1,6 +1,7 @@
 use crate::schema::items;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
+use serde::Serialize;
 
 type AllColumns = (
     items::id,
@@ -19,7 +20,7 @@ pub type ByID<'a> = Filter<All, WithID<'a>>;
 pub type WithName<'a> = Eq<items::name, &'a str>;
 pub type ByName<'a> = Filter<All, WithName<'a>>;
 
-#[derive(Queryable)]
+#[derive(Queryable, Serialize)]
 pub struct Item {
     pub id: i32,
     pub name: String,
