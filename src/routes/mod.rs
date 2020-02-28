@@ -1,33 +1,30 @@
-mod context;
+mod app;
 
-use crate::auth::User;
-use crate::models::Item;
-use crate::FodMapDatabase;
-use context::IndexContext;
-use diesel::prelude::*;
-use rocket::response::Redirect;
-use rocket_contrib::templates::Template;
+use std::sync::Arc;
+use serde::Serialize;
+use tera::{Context, Tera};
+use warp::Filter;
+use warp::Reply;
 
-type Response = Result<Template, Redirect>;
-type Auth = Option<User>;
-
-/// Generate a response type to handle login redirects
-pub fn gen_response<T: serde::Serialize>(
-    template: &'static str,
-    user: &Auth,
-    context: &T,
-) -> Response {
-    user.as_ref()
-        .ok_or(Redirect::to(uri!(
-            crate::auth::routes::login: failed = false
-        )))
-        .and(Ok(Template::render(template, context)))
+pub struct Template<T: Serialize> {
+    name: &'static str,
+    context: T,
 }
 
-#[get("/")]
-pub fn index(conn: FodMapDatabase, user: Auth) -> Result<Response, diesel::result::Error> {
-    Item::all()
-        .get_results(&conn.0)
-        .map(|items| IndexContext::new(items))
-        .and_then(|context| Ok(gen_response("index", &user, &context)))
+impl<T: serde::Serialize> Template<T> {
+    pub fn new(name: &'static str, context: T) -> Self {
+        Template { name, context }
+    }
+
+    pub fn render(self, tera: &Tera) -> impl Reply {
+        let render = Context::from_serialize(self.context)
+            .and_then(|context| tera.render(self.name, &context))
+            .unwrap_or_else(|err| err.to_string());
+
+        warp::reply::html(render)
+    }
+}
+
+pub fn routes(tera: Arc<Tera>) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+    app::index()
 }
