@@ -12,7 +12,7 @@ rocket_contrib = { version = "0.4.2", features = ["tera_templates", "diesel_post
 rocket_codegen = "0.4.2"
 diesel = { version = "1.4.3", features = ["postgres"] }
 serde = { version = "1.0.104", features = ["derive"] }
-bcrypt = "0.6.1"
+bcrypt = "0.7.0"
 clap = "2.33.0"
 dotenv = "0.15.0"
 rpassword = "4.0.5"
