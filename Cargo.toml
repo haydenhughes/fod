@@ -10,9 +10,10 @@ edition = "2018"
 rocket = "0.4.2"
 rocket_contrib = { version = "0.4.2", features = ["tera_templates", "diesel_postgres_pool"] }
 rocket_codegen = "0.4.2"
-diesel = { version = "1.4.3", features = ["postgres"] }
+diesel = { version = "1.4.3", features = ["postgres", "chrono"] }
 serde = { version = "1.0.104", features = ["derive"] }
-bcrypt = "0.6.1"
+chrono = { version = "0.4", features = ["serde"] }
+bcrypt = "0.7.0"
 clap = "2.33.0"
 dotenv = "0.15.0"
 rpassword = "4.0.5"

@@ -11,6 +11,7 @@ extern crate bcrypt;
 extern crate clap;
 extern crate rpassword;
 extern crate serde;
+extern crate chrono;
 
 mod routes;
 mod schema;
@@ -42,7 +43,7 @@ fn main() -> io::Result<()> {
     let matches = App::new("FodMap")
         .version("0.1.0")
         .author("Hayden Hughes <hayden@firemail.cc>")
-        .about("Self-hosted pantry inventory system")
+        .about("Self-hosted meal tracker")
         .setting(AppSettings::SubcommandRequiredElseHelp)
         .subcommand(SubCommand::with_name("server").about("Run web server"))
         .subcommand(

@@ -6,33 +6,6 @@
 
   <section class="section">
     <div class="container">
-      <h1 class="title has-text-centered">
-        Inventory
-      </h1>
-      <div class="level">
-        <div class="level-item">
-          <table class="table is-bordered is-striped is-fullwidth is-hoverable">
-            <thead>
-              <th>Current Qty</th>
-              <th>Required Qty</th>
-              <th>Item</th>
-              <th>Price</th>
-              <th>Notes</th>
-            </thead>
-            <tbody>
-              {% for item in items %}
-              <tr>
-                <td>{{ item.qty }}</td>
-                <td>{{ item.req_qty }}</td>
-                <td>{{ item.name }}</td>
-                <td>${{ item.price }}</td>
-                <td>{{ item.notes }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   </section>
 {% endblock %}

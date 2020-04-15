@@ -1,11 +1,32 @@
 table! {
-    items (id) {
-        id -> Int4,
+    entries (entryid) {
+        entryid -> Int4,
+        timestamp -> Timestamp,
+        mealtype -> Nullable<Int4>,
+        comments -> Nullable<Varchar>,
+    }
+}
+
+table! {
+    foods (foodid) {
+        foodid -> Int4,
         name -> Varchar,
+        description -> Varchar,
+    }
+}
+
+table! {
+    meals (foodid, entryid) {
+        foodid -> Int4,
+        entryid -> Int4,
         qty -> Int4,
-        req_qty -> Nullable<Int4>,
-        price -> Nullable<Float4>,
-        notes -> Nullable<Text>,
+    }
+}
+
+table! {
+    mealtypes (mealtypeid) {
+        mealtypeid -> Int4,
+        name -> Varchar,
     }
 }
 
@@ -17,7 +38,14 @@ table! {
     }
 }
 
+joinable!(entries -> mealtypes (mealtype));
+joinable!(meals -> entries (entryid));
+joinable!(meals -> foods (foodid));
+
 allow_tables_to_appear_in_same_query!(
-    items,
+    entries,
+    foods,
+    meals,
+    mealtypes,
     users,
 );

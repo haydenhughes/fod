@@ -10,8 +10,8 @@
   <div class="navbar-menu" id="navMenu">
     <div class="navbar-start">
       <a href="/" class="navbar-item">Home</a>
-      <a href="/list" class="navbar-item">Shopping List</a>
-      <a href="/metrics" class="navbar-item">Metrics</a>
+      <a href="/list" class="navbar-item">Entries</a>
+      <a href="/new" class="navbar-item">New Entry</a>
     </div>
   </div>
 </nav>
