@@ -1,20 +1,24 @@
 use crate::schema::entries;
+use chrono::naive::NaiveDateTime;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
-use chrono::naive::NaiveDateTime;
 
 type AllColumns = (
     entries::entryid,
     entries::timestamp,
     entries::mealtype,
     entries::comments,
+    entries::userid,
 );
 
 pub type All = Select<entries::table, AllColumns>;
 
 pub type WithID<'a> = Eq<entries::entryid, &'a i32>;
 pub type ByID<'a> = Filter<All, WithID<'a>>;
+
+pub type WithUserID<'a> = Eq<entries::userid, &'a i32>;
+pub type ByUserID<'a> = Filter<All, WithUserID<'a>>;
 
 pub type WithTimeStamp<'a> = Eq<entries::timestamp, &'a NaiveDateTime>;
 pub type ByTimeStamp<'a> = Filter<All, WithTimeStamp<'a>>;
@@ -36,6 +40,10 @@ impl Entry {
         entries::timestamp.eq(timestamp)
     }
 
+    pub fn with_user_id(id: &i32) -> WithUserID {
+        entries::userid.eq(id)
+    }
+
     pub fn all() -> All {
         entries::table.select(entries::all_columns)
     }
@@ -46,5 +54,9 @@ impl Entry {
 
     pub fn by_id(id: &i32) -> ByID {
         Self::all().filter(Self::with_id(id))
+    }
+
+    pub fn by_user_id(id: &i32) -> ByUserID {
+        Self::all().filter(Self::with_user_id(id))
     }
 }
