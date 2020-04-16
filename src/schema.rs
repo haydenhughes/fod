@@ -4,6 +4,7 @@ table! {
         timestamp -> Timestamp,
         mealtype -> Nullable<Int4>,
         comments -> Nullable<Varchar>,
+        userid -> Nullable<Int4>,
     }
 }
 
@@ -31,14 +32,15 @@ table! {
 }
 
 table! {
-    users (id) {
-        id -> Int4,
+    users (userid) {
+        userid -> Int4,
         username -> Varchar,
         password -> Varchar,
     }
 }
 
 joinable!(entries -> mealtypes (mealtype));
+joinable!(entries -> users (userid));
 joinable!(meals -> entries (entryid));
 joinable!(meals -> foods (foodid));
 
