@@ -7,11 +7,11 @@ use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use rocket::request::{FromRequest, Outcome, Request};
 
-type AllColumns = (users::id, users::username, users::password);
+type AllColumns = (users::userid, users::username, users::password);
 
 type All = Select<users::table, AllColumns>;
 
-type WithID<'a> = Eq<users::id, &'a i32>;
+type WithID<'a> = Eq<users::userid, &'a i32>;
 type ByID<'a> = Filter<All, WithID<'a>>;
 
 type WithUserName<'a> = Eq<users::username, &'a str>;
@@ -44,7 +44,7 @@ pub struct User {
 
 impl User {
     pub fn with_id(id: &i32) -> WithID {
-        users::id.eq(id)
+        users::userid.eq(id)
     }
 
     pub fn with_username(name: &str) -> WithUserName {
