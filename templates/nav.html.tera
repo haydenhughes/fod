@@ -9,9 +9,13 @@
   </div>
   <div class="navbar-menu" id="navMenu">
     <div class="navbar-start">
-      <a href="/" class="navbar-item">Home</a>
-      <a href="/list" class="navbar-item">Entries</a>
-      <a href="/new" class="navbar-item">New Entry</a>
+      <a href="/" class="navbar-item">Entries</a>
+      <a href="/metrics" class="navbar-item">Metrics</a>
+    </div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <a href="/logout" class="button is-outlined">Logout</a>
+      </div>
     </div>
   </div>
 </nav>

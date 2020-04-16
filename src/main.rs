@@ -75,7 +75,8 @@ fn main() -> io::Result<()> {
                 routes![
                     routes::index,
                     auth::routes::login,
-                    auth::routes::user_login
+                    auth::routes::user_login,
+                    auth::routes::user_logout,
                 ],
             )
             .mount(

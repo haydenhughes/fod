@@ -11,9 +11,9 @@ use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket_contrib::templates::Template;
 
-#[get("/login?<failed>")]
-pub fn login(failed: Option<bool>) -> Template {
-    let context = LoginContext::new(failed.unwrap_or(false));
+#[get("/login?<failed>&<logout>")]
+pub fn login(failed: Option<bool>, logout: Option<bool>) -> Template {
+    let context = LoginContext::new(failed.unwrap_or(false), logout.unwrap_or(false));
     Template::render("login", &context)
 }
 
@@ -33,13 +33,19 @@ pub fn user_login(
                     cookies.add_private(Cookie::new("user_id", user.id.to_string()));
                     return Ok(Redirect::to(uri!(crate::routes::index)));
                 } else {
-                    return Ok(Redirect::to(uri!(login: failed = true)));
+                    return Ok(Redirect::to(uri!(login: failed = true, logout = false)));
                 }
             }
             // FIXME: Actually return a helpful error
             Err(_) => Err(Status::InternalServerError),
         },
-        Err(diesel::result::Error::NotFound) => Ok(Redirect::to(uri!(login: failed = true))),
+        Err(diesel::result::Error::NotFound) => Ok(Redirect::to(uri!(login: failed = true, logout = false))),
         Err(_) => Err(Status::InternalServerError),
     }
+}
+
+#[get("/logout")]
+pub fn user_logout(mut cookies: Cookies) -> Redirect {
+    cookies.remove_private(Cookie::named("user_id"));
+    Redirect::to(uri!(login: failed = false, logout = true))
 }
