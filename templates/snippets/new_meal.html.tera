@@ -8,7 +8,7 @@
     <section class="modal-card-body">
       <form id="new-meal-form" class="form" action="index.html" method="post">
         <div class="field">
-          <label class="label">Meal Type</label>
+          <label class="label">Meal type</label>
           <p class="control has-icons-left">
             <input list="mealtypes" class="input" name="mealtype" placeholder="Breakfast">
             <span class="icon is-small is-left">
