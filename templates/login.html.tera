@@ -22,7 +22,7 @@
           FodMap
         </h1>
         <h2 class="subtitle">
-          The self-hosted meal tracker
+          The self-hosted health tracker
         </h2>
         <form action="/login" method="post">
           <div class="field">

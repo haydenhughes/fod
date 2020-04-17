@@ -1,10 +1,18 @@
 table! {
-    entries (entryid) {
-        entryid -> Int4,
-        timestamp -> Timestamp,
-        mealtype -> Nullable<Int4>,
-        comments -> Nullable<Varchar>,
+    exerciseentries (exerciseentryid) {
+        exerciseentryid -> Int4,
         userid -> Nullable<Int4>,
+        exercisetype -> Nullable<Int4>,
+        starttime -> Timestamp,
+        endtime -> Timestamp,
+        comments -> Nullable<Varchar>,
+    }
+}
+
+table! {
+    exercisetypes (exercisetypeid) {
+        exercisetypeid -> Int4,
+        name -> Varchar,
     }
 }
 
@@ -13,6 +21,16 @@ table! {
         foodid -> Int4,
         name -> Varchar,
         description -> Varchar,
+    }
+}
+
+table! {
+    mealentries (mealentryid) {
+        mealentryid -> Int4,
+        timestamp -> Timestamp,
+        mealtype -> Nullable<Int4>,
+        comments -> Nullable<Varchar>,
+        userid -> Nullable<Int4>,
     }
 }
 
@@ -32,6 +50,16 @@ table! {
 }
 
 table! {
+    sleepentries (sleepentryid) {
+        sleepentryid -> Int4,
+        userid -> Nullable<Int4>,
+        starttime -> Timestamp,
+        endtime -> Timestamp,
+        comments -> Nullable<Varchar>,
+    }
+}
+
+table! {
     users (userid) {
         userid -> Int4,
         username -> Varchar,
@@ -39,15 +67,21 @@ table! {
     }
 }
 
-joinable!(entries -> mealtypes (mealtype));
-joinable!(entries -> users (userid));
-joinable!(meals -> entries (entryid));
+joinable!(exerciseentries -> exercisetypes (exercisetype));
+joinable!(exerciseentries -> users (userid));
+joinable!(mealentries -> mealtypes (mealtype));
+joinable!(mealentries -> users (userid));
 joinable!(meals -> foods (foodid));
+joinable!(meals -> mealentries (entryid));
+joinable!(sleepentries -> users (userid));
 
 allow_tables_to_appear_in_same_query!(
-    entries,
+    exerciseentries,
+    exercisetypes,
     foods,
+    mealentries,
     meals,
     mealtypes,
+    sleepentries,
     users,
 );

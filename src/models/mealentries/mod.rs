@@ -1,51 +1,55 @@
-use crate::schema::entries;
+pub mod foods;
+pub mod meals;
+pub mod mealtypes;
+
+use crate::schema::mealentries;
 use chrono::naive::NaiveDateTime;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
 
 type AllColumns = (
-    entries::entryid,
-    entries::timestamp,
-    entries::mealtype,
-    entries::comments,
-    entries::userid,
+    mealentries::mealentryid,
+    mealentries::timestamp,
+    mealentries::mealtype,
+    mealentries::comments,
+    mealentries::userid,
 );
 
-pub type All = Select<entries::table, AllColumns>;
+pub type All = Select<mealentries::table, AllColumns>;
 
-pub type WithID<'a> = Eq<entries::entryid, &'a i32>;
+pub type WithID<'a> = Eq<mealentries::mealentryid, &'a i32>;
 pub type ByID<'a> = Filter<All, WithID<'a>>;
 
-pub type WithUserID<'a> = Eq<entries::userid, &'a i32>;
+pub type WithUserID<'a> = Eq<mealentries::userid, &'a i32>;
 pub type ByUserID<'a> = Filter<All, WithUserID<'a>>;
 
-pub type WithTimeStamp<'a> = Eq<entries::timestamp, &'a NaiveDateTime>;
+pub type WithTimeStamp<'a> = Eq<mealentries::timestamp, &'a NaiveDateTime>;
 pub type ByTimeStamp<'a> = Filter<All, WithTimeStamp<'a>>;
 
 #[derive(Queryable, Serialize)]
-pub struct Entry {
+pub struct MealEntry {
     pub id: i32,
     pub timestamp: NaiveDateTime,
     pub mealtype: i32,
     pub comments: String,
 }
 
-impl Entry {
+impl MealEntry {
     pub fn with_id(id: &i32) -> WithID {
-        entries::entryid.eq(id)
+        mealentries::mealentryid.eq(id)
     }
 
     pub fn with_timestamp(timestamp: &NaiveDateTime) -> WithTimeStamp {
-        entries::timestamp.eq(timestamp)
+        mealentries::timestamp.eq(timestamp)
     }
 
     pub fn with_user_id(id: &i32) -> WithUserID {
-        entries::userid.eq(id)
+        mealentries::userid.eq(id)
     }
 
     pub fn all() -> All {
-        entries::table.select(entries::all_columns)
+        mealentries::table.select(mealentries::all_columns)
     }
 
     pub fn by_timestamp(timestamp: &NaiveDateTime) -> ByTimeStamp {

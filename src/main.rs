@@ -42,8 +42,8 @@ pub fn establish_connection() -> PgConnection {
 fn main() -> io::Result<()> {
     let matches = App::new("FodMap")
         .version("0.1.0")
-        .author("Hayden Hughes <hayden@firemail.cc>")
-        .about("Self-hosted meal tracker")
+        .author("Hayden Hughes <hayden@foxes.systems>")
+        .about("Self-hosted health tracker")
         .setting(AppSettings::SubcommandRequiredElseHelp)
         .subcommand(SubCommand::with_name("server").about("Run web server"))
         .subcommand(

@@ -1,0 +1,73 @@
+<a class="box is-primary modal-button" data-target="exercise-1-modal" aria-haspopup="true">
+  <article class="media">
+    <div class="media-left">
+      <span class="icon is-large">
+        <i class="fa fa-2x fa-bicycle"></i>
+      </span>
+    </div>
+    <div class="media-content">
+      <div class="content">
+        <strong>Run</strong> <br>
+        <small>8:00</small> <small>February 2, 2020</small>
+      </div>
+    </div>
+    <div class="media-right">
+      <small>view</small>
+    </div>
+  </article>
+</a>
+
+
+<div id="exercise-1-modal" class="modal">
+  <div class="modal-background" data-target="exercise-1-modal"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <article class="media modal-card-title">
+        <figure class="media-left">
+          <span class="icon is-large">
+            <i class="fa fa-2x fa-bicycle"></i>
+          </span>
+        </figure>
+        <div class="media-content">
+          <p class="modal-card-title">
+            <strong>Run</strong> <br>
+            <small>08:00</small> <small>February 2, 2020</small>
+          </p>
+        </div>
+      </article>
+      <button class="delete" aria-label="close" data-target="exercise-1-modal"></button>
+    </header>
+    <section class="modal-card-body">
+      <div class="content">
+        <table class="table is-hoverable">
+          <thead>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Time elapsed</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>08:00 - February 2, 2020</td>
+              <td>08:40 - February 3, 2020</td>
+              <td>00:40</td>
+            </tr>
+          </tbody
+        </table>
+        <table class="table is-hoverable">
+          <thead>
+            <th>Comments</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Very sweaty</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <div class="container">
+      <button class="button modal-button is-danger" data-target="confirm-delete">Delete</button>
+    </footer>
+  </div>
+</div>

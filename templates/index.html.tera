@@ -6,9 +6,11 @@
 
   {% include "snippets/new_meal" %}
   {% include "snippets/new_sleep" %}
+  {% include "snippets/new_exercise" %}
   {% include "snippets/confirm_delete" %}
   {% include "snippets/meal_types" %}
   {% include "snippets/foods" %}
+  {% include "snippets/exercise_types" %}
 
   <section class="section">
     <div class="container">
@@ -19,6 +21,14 @@
               <i class="fa fa-plus" aria-hidden="true"></i>
             </span>
             <span>Add Meal</span>
+          </button>
+        </div>
+        <div class="level-item">
+          <button class="button is-white is-large is-fullwidth modal-button" data-target="new-exercise">
+            <span class="icon">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+            <span>Add Exercise</span>
           </button>
         </div>
         <div class="level-item">
@@ -50,6 +60,7 @@
       {% for i in [1,2,3,4,5,] %}
         {% include "snippets/sleep" %}
         {% include "snippets/meal" %}
+        {% include "snippets/exercise" %}
       {% endfor %}
     </div>
   </section>
