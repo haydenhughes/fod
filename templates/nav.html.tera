@@ -1,6 +1,6 @@
-<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <p class="navbar-item">FodMap</p>
+    <a href="/" class="navbar-item">FodMap</a>
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -9,7 +9,6 @@
   </div>
   <div class="navbar-menu" id="navMenu">
     <div class="navbar-start">
-      <a href="/" class="navbar-item">Entries</a>
       <a href="/metrics" class="navbar-item">Metrics</a>
     </div>
     <div class="navbar-end">

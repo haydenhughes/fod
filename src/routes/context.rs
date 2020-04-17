@@ -1,13 +1,12 @@
-use crate::models::Item;
 use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct IndexContext {
-    items: Vec<Item>,
+    items: Vec<String>,
 }
 
 impl IndexContext {
-    pub fn new(items: Vec<Item>) -> Self {
+    pub fn new(items: Vec<String>) -> Self {
         IndexContext { items }
     }
 }

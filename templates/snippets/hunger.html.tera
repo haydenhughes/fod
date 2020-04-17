@@ -1,0 +1,60 @@
+<div id="hunger-modal" class="modal">
+  <div class="modal-background" data-target="hunger-modal"></div>
+  <div class="modal-content">
+    <div class="box">
+      <h1 class="title">Hunger Level Scale</h1>
+      <table class="table is-hoverable">
+        <thead>
+          <tr>
+            <th>Rating</th>
+            <th>Physical Sensation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Starvation, need to eat now, hunger pains, shaky, light headed</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Slight pain in stomach, hard to concentrate, lack of energy</td>
+          </tr>
+          <tr class="is-selected">
+            <td>3</td>
+            <td>Beginning of physical signs of hunger, stomach growling sometimes</td>
+          </tr>
+          <tr class="is-selected">
+            <td>4</td>
+            <td>Could eat if it were suggested</td>
+          </tr>
+          <tr class="is-selected">
+            <td>5</td>
+            <td>Neutral</td>
+          </tr>
+          <tr class="is-selected">
+            <td>6</td>
+            <td>Satisfied</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Feel food in stomach</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>Stomach sticks out</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>Bloated, clothes feel tight, sleepy and drained</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>Definitely full, stomach uncomfortable, no energy, physically sick</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Note:</strong> the green ratings is the ideal zone</p>
+    </div>
+  </div>
+  <button type="button" class="modal-close is-large" aria-label="close" data-target="hunger-modal"></button>
+</div>
