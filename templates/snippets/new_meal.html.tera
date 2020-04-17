@@ -14,11 +14,6 @@
             <span class="icon is-small is-left">
               <i class="fa fa-fork-awesome"></i>
             </span>
-            <datalist id="mealtypes">
-              <option value="Breakfast">
-              <option value="Lunch">
-              <option value="Dinner">
-            </datalist>
           </p>
         </div>
 
@@ -80,13 +75,6 @@
           </div>
           <a class="help modal-button" data-target="hunger-modal">What's the Hunger Level Scale?</a>
         </div>
-
-        <datalist id="foods">
-          <option value="Milk">
-          <option value="Ceral">
-          <option value="Pizza">
-        </datalist>
-
         <template id="food-item">
           <div id="item" class="field has-addons">
             <p class="control is-expanded">

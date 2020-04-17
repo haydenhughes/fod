@@ -7,6 +7,8 @@
   {% include "snippets/new_meal" %}
   {% include "snippets/new_sleep" %}
   {% include "snippets/confirm_delete" %}
+  {% include "snippets/meal_types" %}
+  {% include "snippets/foods" %}
 
   <section class="section">
     <div class="container">

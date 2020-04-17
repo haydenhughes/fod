@@ -1,0 +1,5 @@
+<datalist id="mealtypes">
+  <option value="Breakfast">
+  <option value="Lunch">
+  <option value="Dinner">
+</datalist>

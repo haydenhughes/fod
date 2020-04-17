@@ -1,0 +1,5 @@
+<datalist id="foods">
+  <option value="Milk">
+  <option value="Ceral">
+  <option value="Pizza">
+</datalist>
