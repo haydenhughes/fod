@@ -1,5 +1,5 @@
-pub mod errors;
 mod context;
+pub mod errors;
 
 use crate::auth::User;
 use crate::FodMapDatabase;

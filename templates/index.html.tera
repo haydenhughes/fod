@@ -2,7 +2,7 @@
 
 
 {% block body %}
-  {% include "nav" %}
+  {% include "snippets/nav" %}
 
   {% include "snippets/meal/new_meal" %}
   {% include "snippets/sleep/new_sleep" %}
