@@ -4,13 +4,12 @@
 {% block body %}
   {% include "nav" %}
 
-  {% include "snippets/new_meal" %}
-  {% include "snippets/new_sleep" %}
-  {% include "snippets/new_exercise" %}
-  {% include "snippets/confirm_delete" %}
-  {% include "snippets/meal_types" %}
-  {% include "snippets/foods" %}
-  {% include "snippets/exercise_types" %}
+  {% include "snippets/meal/new_meal" %}
+  {% include "snippets/sleep/new_sleep" %}
+  {% include "snippets/exercise/new_exercise" %}
+  {% include "snippets/meal/meal_types" %}
+  {% include "snippets/meal/foods" %}
+  {% include "snippets/exercise/exercise_types" %}
 
   <section class="section">
     <div class="container">
@@ -58,9 +57,9 @@
       </div>
 
       {% for i in [1,2,3,4,5,] %}
-        {% include "snippets/sleep" %}
-        {% include "snippets/meal" %}
-        {% include "snippets/exercise" %}
+        {% include "snippets/sleep/sleep" %}
+        {% include "snippets/meal/meal" %}
+        {% include "snippets/exercise/exercise" %}
       {% endfor %}
     </div>
   </section>
@@ -84,4 +83,6 @@
       </nav>
     </div>
   </section>
+
+  {% include "snippets/confirm_delete" %}
 {% endblock %}
