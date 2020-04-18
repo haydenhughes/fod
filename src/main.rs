@@ -28,6 +28,7 @@ use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
 use rpassword::read_password_from_tty;
 use std::{env, io};
+use human_panic::setup_panic;
 
 #[database("fodmap")]
 pub struct FodMapDatabase(diesel::PgConnection);
@@ -39,7 +40,20 @@ pub fn establish_connection() -> PgConnection {
     PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 }
 
+fn ask_password() -> Result<String, io::Error> {
+    let password = read_password_from_tty(Some("Password: "))?;
+
+    if password == read_password_from_tty(Some("Re-enter Password: "))? {
+        Ok(password)
+    } else {
+        println!("Sorry, passwords do not match.");
+        std::process::exit(1);
+    }
+}
+
 fn main() -> io::Result<()> {
+    setup_panic!();
+
     let matches = App::new("FodMap")
         .version("0.1.0")
         .author("Hayden Hughes <hayden@foxes.systems>")
@@ -107,14 +121,14 @@ fn main() -> io::Result<()> {
             .value_of("USERNAME")
             .unwrap();
 
-        let password = read_password_from_tty(Some("Password: "))?;
-
-        let new_user = NewUser::new(username, password.as_str()).expect("Error creating new user");
+        let new_user = NewUser::new(username, ask_password()?.as_str()).expect("Error creating new user");
 
         diesel::insert_into(schema::users::table)
             .values(&new_user)
             .execute(&conn)
             .expect("Error saving new user");
+
+        println!("Succesfully created user {}", username);
     }
 
     if matches.is_present("chpasswd") {
@@ -126,13 +140,18 @@ fn main() -> io::Result<()> {
             .value_of("USERNAME")
             .unwrap();
 
-        let password = read_password_from_tty(Some("Password: "))?;
+        println!("Changing password for {}", username);
 
         diesel::update(schema::users::table)
             .filter(User::with_username(username))
-            .set(schema::users::password.eq(User::hash_password(password).unwrap()))
+            .set(
+                schema::users::password
+                    .eq(User::hash_password(ask_password()?).expect("Error hashing password")),
+            )
             .execute(&conn)
             .expect("Error updating password");
+
+        println!("Succesfully changed password of user {}", username);
     }
 
     if matches.is_present("deluser") {
@@ -148,6 +167,9 @@ fn main() -> io::Result<()> {
             .filter(User::with_username(username))
             .execute(&conn)
             .expect("Error deleting new user");
+
+
+        println!("Succesfully deleted user {}", username);
     }
 
     Ok(())
