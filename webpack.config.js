@@ -37,7 +37,7 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'fod.css'
+      filename: 'fodmap.css'
     }),
   ]
 };
