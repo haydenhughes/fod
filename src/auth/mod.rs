@@ -4,7 +4,6 @@ use crate::schema::users;
 use crate::FodMapDatabase;
 use bcrypt::{hash, verify, BcryptError, DEFAULT_COST};
 use diesel::dsl::{Eq, Filter, Select};
-use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use rocket::request::{FromRequest, Outcome, Request};
 
