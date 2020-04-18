@@ -102,7 +102,7 @@ fn main() -> io::Result<()> {
                     auth::routes::user_login,
                     auth::routes::user_logout,
                 ],
-            )
+            ).register(catchers![routes::errors::unauthorized])
             .mount(
                 "/static",
                 StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")),

@@ -5,6 +5,7 @@ use crate::FodMapDatabase;
 use bcrypt::{hash, verify, BcryptError, DEFAULT_COST};
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
+use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
 
 type AllColumns = (users::userid, users::username, users::password);
@@ -16,6 +17,12 @@ type ByID<'a> = Filter<All, WithID<'a>>;
 
 type WithUserName<'a> = Eq<users::username, &'a str>;
 type ByUserName<'a> = Filter<All, WithUserName<'a>>;
+
+#[derive(Debug)]
+pub enum AuthenticationError {
+    DBError,
+    Invalid,
+}
 
 #[derive(FromForm, Insertable)]
 #[table_name = "users"]
@@ -73,17 +80,24 @@ impl User {
 }
 
 impl<'a, 'r> FromRequest<'a, 'r> for User {
-    type Error = ();
+    type Error = AuthenticationError;
 
     fn from_request(request: &'a Request<'r>) -> Outcome<Self, Self::Error> {
-        let conn = request.guard::<FodMapDatabase>()?;
         request
-            .cookies()
-            .get_private("user_id")
-            .and_then(|cookie| cookie.value().parse::<i32>().ok())
-            .as_ref()
-            .and_then(|id| Self::by_id(id).first(&conn.0).ok())
-            .map(|u| Outcome::Success(u))
-            .unwrap_or(Outcome::Forward(()))
+        .guard::<FodMapDatabase>()
+        .map_failure(|_| (Status::InternalServerError, AuthenticationError::DBError))
+        .and_then(|conn| {
+            request
+                .cookies()
+                .get_private("user_id")
+                .and_then(|cookie| cookie.value().parse::<i32>().ok())
+                .as_ref()
+                .and_then(|id| Self::by_id(id).first(&conn.0).ok())
+                .map(|u| Outcome::Success(u))
+                .unwrap_or(Outcome::Failure((
+                    Status::Unauthorized,
+                    AuthenticationError::Invalid,
+                )))
+        })
     }
 }
