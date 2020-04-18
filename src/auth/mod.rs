@@ -4,6 +4,7 @@ use crate::schema::users;
 use crate::FodMapDatabase;
 use bcrypt::{hash, verify, BcryptError, DEFAULT_COST};
 use diesel::dsl::{Eq, Filter, Select};
+use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use rocket::request::{FromRequest, Outcome, Request};
 
@@ -26,7 +27,7 @@ pub struct NewUser {
 
 impl NewUser {
     pub fn new(username: &str, password: &str) -> Result<Self, BcryptError> {
-        hash(password, DEFAULT_COST).and_then(|p| {
+        User::hash_password(password).and_then(|p| {
             Ok(NewUser {
                 username: username.into(),
                 password: p,
@@ -35,7 +36,7 @@ impl NewUser {
     }
 }
 
-#[derive(Queryable)]
+#[derive(Queryable, Identifiable)]
 pub struct User {
     pub id: i32,
     pub username: String,
@@ -61,6 +62,10 @@ impl User {
 
     pub fn by_id(id: &i32) -> ByID {
         Self::all().filter(Self::with_id(id))
+    }
+
+    pub fn hash_password<S: AsRef<str>>(password: S) -> Result<String, BcryptError> {
+        hash(password.as_ref(), DEFAULT_COST)
     }
 
     pub fn check_password<S: AsRef<str>>(&self, password: S) -> Result<bool, BcryptError> {

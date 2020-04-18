@@ -8,16 +8,18 @@ extern crate rocket_codegen;
 #[macro_use]
 extern crate diesel;
 extern crate bcrypt;
+extern crate chrono;
 extern crate clap;
 extern crate rpassword;
 extern crate serde;
-extern crate chrono;
 
-mod routes;
-mod schema;
 mod auth;
 mod models;
+mod routes;
+mod schema;
 
+use auth::NewUser;
+use auth::User;
 use clap::{App, AppSettings, Arg, SubCommand};
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
@@ -26,8 +28,6 @@ use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
 use rpassword::read_password_from_tty;
 use std::{env, io};
-use auth::NewUser;
-use auth::User;
 
 #[database("fodmap")]
 pub struct FodMapDatabase(diesel::PgConnection);
@@ -53,6 +53,16 @@ fn main() -> io::Result<()> {
                 .arg(
                     Arg::with_name("USERNAME")
                         .help("Sets the username for the new user")
+                        .required(true),
+                ),
+        )
+        .subcommand(
+            SubCommand::with_name("chpasswd")
+                .about("Change a user password")
+                .long_about("Requires the DATABASE_URL environment vairable to be set")
+                .arg(
+                    Arg::with_name("USERNAME")
+                        .help("Secify the username of the user to modify the password of")
                         .required(true),
                 ),
         )
@@ -105,6 +115,24 @@ fn main() -> io::Result<()> {
             .values(&new_user)
             .execute(&conn)
             .expect("Error saving new user");
+    }
+
+    if matches.is_present("chpasswd") {
+        let conn = establish_connection();
+
+        let username = matches
+            .subcommand_matches("chpasswd")
+            .unwrap()
+            .value_of("USERNAME")
+            .unwrap();
+
+        let password = read_password_from_tty(Some("Password: "))?;
+
+        diesel::update(schema::users::table)
+            .filter(User::with_username(username))
+            .set(schema::users::password.eq(User::hash_password(password).unwrap()))
+            .execute(&conn)
+            .expect("Error updating password");
     }
 
     if matches.is_present("deluser") {
