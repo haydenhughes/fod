@@ -21,13 +21,13 @@ pub type WithUserID<'a> = Eq<exerciseentries::userid, &'a i32>;
 pub type ByUserID<'a> = Filter<All, WithUserID<'a>>;
 
 #[derive(Queryable, Serialize)]
-pub struct Food {
+pub struct ExerciseEntry {
     pub id: i32,
     pub name: String,
     pub description: String,
 }
 
-impl Food {
+impl ExerciseEntry {
     pub fn with_id(id: &i32) -> WithID {
         exerciseentries::exerciseentryid.eq(id)
     }

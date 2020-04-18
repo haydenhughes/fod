@@ -24,11 +24,11 @@ use clap::{App, AppSettings, Arg, SubCommand};
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use dotenv::dotenv;
+use human_panic::setup_panic;
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
 use rpassword::read_password_from_tty;
 use std::{env, io};
-use human_panic::setup_panic;
 
 #[database("fodmap")]
 pub struct FodMapDatabase(diesel::PgConnection);
@@ -102,7 +102,8 @@ fn main() -> io::Result<()> {
                     auth::routes::user_login,
                     auth::routes::user_logout,
                 ],
-            ).register(catchers![routes::errors::unauthorized])
+            )
+            .register(catchers![routes::errors::unauthorized])
             .mount(
                 "/static",
                 StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")),
@@ -121,7 +122,8 @@ fn main() -> io::Result<()> {
             .value_of("USERNAME")
             .unwrap();
 
-        let new_user = NewUser::new(username, ask_password()?.as_str()).expect("Error creating new user");
+        let new_user =
+            NewUser::new(username, ask_password()?.as_str()).expect("Error creating new user");
 
         diesel::insert_into(schema::users::table)
             .values(&new_user)
@@ -167,7 +169,6 @@ fn main() -> io::Result<()> {
             .filter(User::with_username(username))
             .execute(&conn)
             .expect("Error deleting new user");
-
 
         println!("Succesfully deleted user {}", username);
     }
