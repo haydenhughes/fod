@@ -29,10 +29,11 @@ pub type ByTimeStamp<'a> = Filter<All, WithTimeStamp<'a>>;
 
 #[derive(Queryable, Serialize)]
 pub struct MealEntry {
-    pub id: i32,
+    pub mealentryid: i32,
     pub timestamp: NaiveDateTime,
     pub mealtype: i32,
-    pub comments: String,
+    pub comments: Option<String>,
+    pub userid: i32,
 }
 
 impl MealEntry {

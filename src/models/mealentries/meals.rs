@@ -17,7 +17,7 @@ pub type ByEntryID<'a> = Filter<All, WithEntryID<'a>>;
 #[derive(Queryable, Serialize)]
 pub struct Meal {
     pub foodid: i32,
-    pub enrtyid: i32,
+    pub entryid: i32,
     pub qty: i32,
 }
 

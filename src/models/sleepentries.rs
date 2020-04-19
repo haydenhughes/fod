@@ -26,7 +26,7 @@ pub struct SleepEntry {
     pub userid: i32,
     pub starttime: NaiveDateTime,
     pub endtime: NaiveDateTime,
-    pub comments: String,
+    pub comments: Option<String>,
 }
 
 impl SleepEntry {

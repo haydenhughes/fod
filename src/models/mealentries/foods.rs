@@ -6,7 +6,6 @@ use serde::Serialize;
 type AllColumns = (
     foods::foodid,
     foods::name,
-    foods::description,
 );
 
 pub type All = Select<foods::table, AllColumns>;
@@ -21,7 +20,6 @@ pub type ByName<'a> = Filter<All, WithName<'a>>;
 pub struct Food {
     pub id: i32,
     pub name: String,
-    pub description: String,
 }
 
 impl Food {

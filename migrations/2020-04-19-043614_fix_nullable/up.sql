@@ -1,0 +1,10 @@
+ALTER TABLE exerciseentries
+ALTER COLUMN userid SET NOT NULL,
+ALTER COLUMN exercisetype SET NOT NULL;
+
+ALTER TABLE sleepentries
+ALTER COLUMN userid SET NOT NULL;
+
+ALTER TABLE mealentries
+ALTER COLUMN userid SET NOT NULL,
+ALTER COLUMN mealtype SET NOT NULL;

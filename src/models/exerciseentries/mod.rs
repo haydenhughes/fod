@@ -2,6 +2,7 @@ use crate::schema::exerciseentries;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
+use chrono::NaiveDateTime;
 
 type AllColumns = (
     exerciseentries::exerciseentryid,
@@ -22,9 +23,12 @@ pub type ByUserID<'a> = Filter<All, WithUserID<'a>>;
 
 #[derive(Queryable, Serialize)]
 pub struct ExerciseEntry {
-    pub id: i32,
-    pub name: String,
-    pub description: String,
+    pub exerciseentryid: i32,
+    pub userid: i32,
+    pub exercisetype: i32,
+    pub starttime: NaiveDateTime,
+    pub endtime: NaiveDateTime,
+    pub comments: Option<String>
 }
 
 impl ExerciseEntry {
