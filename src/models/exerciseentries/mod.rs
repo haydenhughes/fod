@@ -6,9 +6,7 @@ use chrono::NaiveDateTime;
 
 type AllColumns = (
     exerciseentries::exerciseentryid,
-    exerciseentries::userid,
     exerciseentries::exercisetype,
-    exerciseentries::starttime,
     exerciseentries::endtime,
     exerciseentries::comments,
 );
@@ -18,15 +16,10 @@ pub type All = Select<exerciseentries::table, AllColumns>;
 pub type WithID<'a> = Eq<exerciseentries::exerciseentryid, &'a i32>;
 pub type ByID<'a> = Filter<All, WithID<'a>>;
 
-pub type WithUserID<'a> = Eq<exerciseentries::userid, &'a i32>;
-pub type ByUserID<'a> = Filter<All, WithUserID<'a>>;
-
 #[derive(Queryable, Serialize)]
 pub struct ExerciseEntry {
-    pub exerciseentryid: i32,
-    pub userid: i32,
+    pub id: i32,
     pub exercisetype: i32,
-    pub starttime: NaiveDateTime,
     pub endtime: NaiveDateTime,
     pub comments: Option<String>
 }
@@ -36,16 +29,8 @@ impl ExerciseEntry {
         exerciseentries::exerciseentryid.eq(id)
     }
 
-    pub fn with_user_id(id: &i32) -> WithUserID {
-        exerciseentries::userid.eq(id)
-    }
-
     pub fn all() -> All {
         exerciseentries::table.select(exerciseentries::all_columns)
-    }
-
-    pub fn by_user_id(id: &i32) -> ByUserID {
-        Self::all().filter(Self::with_user_id(id))
     }
 
     pub fn by_id(id: &i32) -> ByID {

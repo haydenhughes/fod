@@ -1,0 +1,13 @@
+DROP TABLE entries;
+
+ALTER TABLE exerciseentries
+ADD COLUMN userid INTEGER REFERENCES users (userid) NOT NULL,
+ADD COLUMN starttime TIMESTAMP NOT NULL;
+
+ALTER TABLE sleepentries
+ADD COLUMN userid INTEGER REFERENCES users (userid) NOT NULL,
+ADD COLUMN starttime TIMESTAMP NOT NULL;
+
+ALTER TABLE sleepentries
+ADD COLUMN userid INTEGER REFERENCES users (userid) NOT NULL,
+ADD COLUMN timestamp TIMESTAMP NOT NULL;
