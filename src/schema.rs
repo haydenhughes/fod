@@ -1,93 +1,90 @@
 table! {
-    entries (entryid) {
-        entryid -> Int4,
-        userid -> Nullable<Int4>,
-        mealentryid -> Nullable<Int4>,
-        exerciseentryid -> Nullable<Int4>,
-        sleepentryid -> Nullable<Int4>,
+    entries (id) {
+        id -> Int4,
+        user_id -> Int4,
         timestamp -> Timestamp,
-    }
-}
-
-table! {
-    exerciseentries (exerciseentryid) {
-        exerciseentryid -> Int4,
-        exercisetype -> Int4,
-        endtime -> Timestamp,
         comments -> Nullable<Varchar>,
     }
 }
 
 table! {
-    exercisetypes (exercisetypeid) {
-        exercisetypeid -> Int4,
+    exercise_entries (id) {
+        id -> Int4,
+        entry_id -> Int4,
+        exercise_type_id -> Int4,
+        duration -> Timestamp,
+    }
+}
+
+table! {
+    exercise_types (id) {
+        id -> Int4,
         name -> Varchar,
     }
 }
 
 table! {
-    foods (foodid) {
-        foodid -> Int4,
+    foods (id) {
+        id -> Int4,
         name -> Varchar,
     }
 }
 
 table! {
-    mealentries (mealentryid) {
-        mealentryid -> Int4,
-        mealtype -> Int4,
-        comments -> Nullable<Varchar>,
+    meal_entries (id) {
+        id -> Int4,
+        entry_id -> Int4,
+        meal_type_id -> Int4,
     }
 }
 
 table! {
-    meals (foodid, entryid) {
-        foodid -> Int4,
-        entryid -> Int4,
-        qty -> Int4,
-    }
-}
-
-table! {
-    mealtypes (mealtypeid) {
-        mealtypeid -> Int4,
+    meal_types (id) {
+        id -> Int4,
         name -> Varchar,
     }
 }
 
 table! {
-    sleepentries (sleepentryid) {
-        sleepentryid -> Int4,
-        endtime -> Timestamp,
-        comments -> Nullable<Varchar>,
+    meals (food_id, meal_entry_id) {
+        food_id -> Int4,
+        meal_entry_id -> Int4,
     }
 }
 
 table! {
-    users (userid) {
-        userid -> Int4,
-        username -> Varchar,
+    sleep_entries (id) {
+        id -> Int4,
+        entry_id -> Int4,
+        duration -> Timestamp,
+    }
+}
+
+table! {
+    users (id) {
+        id -> Int4,
+        name -> Varchar,
         password -> Varchar,
     }
 }
 
-joinable!(entries -> exerciseentries (exerciseentryid));
-joinable!(entries -> mealentries (mealentryid));
-joinable!(entries -> sleepentries (sleepentryid));
-joinable!(entries -> users (userid));
-joinable!(exerciseentries -> exercisetypes (exercisetype));
-joinable!(mealentries -> mealtypes (mealtype));
-joinable!(meals -> foods (foodid));
-joinable!(meals -> mealentries (entryid));
+joinable!(entries -> users (user_id));
+joinable!(exercise_entries -> entries (entry_id));
+joinable!(exercise_entries -> exercise_types (exercise_type_id));
+joinable!(meal_entries -> entries (entry_id));
+joinable!(meal_entries -> meal_types (meal_type_id));
+joinable!(meals -> foods (food_id));
+joinable!(meals -> meal_entries (meal_entry_id));
+joinable!(sleep_entries -> entries (entry_id));
 
 allow_tables_to_appear_in_same_query!(
     entries,
-    exerciseentries,
-    exercisetypes,
+    exercise_entries,
+    exercise_types,
     foods,
-    mealentries,
+    meal_entries,
+    meal_types,
     meals,
-    mealtypes,
-    sleepentries,
+    sleep_entries,
     users,
 );

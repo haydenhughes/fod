@@ -7,16 +7,17 @@ use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
+use serde::Serialize;
 
-type AllColumns = (users::userid, users::username, users::password);
+type AllColumns = (users::id, users::name, users::password);
 
 type All = Select<users::table, AllColumns>;
 
-type WithID<'a> = Eq<users::userid, &'a i32>;
+type WithID<'a> = Eq<users::id, &'a i32>;
 type ByID<'a> = Filter<All, WithID<'a>>;
 
-type WithUserName<'a> = Eq<users::username, &'a str>;
-type ByUserName<'a> = Filter<All, WithUserName<'a>>;
+type WithName<'a> = Eq<users::name, &'a str>;
+type ByName<'a> = Filter<All, WithName<'a>>;
 
 #[derive(Debug)]
 pub enum AuthenticationError {
@@ -27,7 +28,7 @@ pub enum AuthenticationError {
 #[derive(FromForm, Insertable)]
 #[table_name = "users"]
 pub struct NewUser {
-    pub username: String,
+    pub name: String,
     pub password: String,
 }
 
@@ -35,34 +36,34 @@ impl NewUser {
     pub fn new(username: &str, password: &str) -> Result<Self, BcryptError> {
         User::hash_password(password).and_then(|p| {
             Ok(NewUser {
-                username: username.into(),
+                name: username.into(),
                 password: p,
             })
         })
     }
 }
 
-#[derive(Queryable, Identifiable)]
+#[derive(Queryable, Identifiable, Serialize)]
 pub struct User {
     pub id: i32,
-    pub username: String,
+    pub name: String,
     pub password: String,
 }
 
 impl User {
     pub fn with_id(id: &i32) -> WithID {
-        users::userid.eq(id)
+        users::id.eq(id)
     }
 
-    pub fn with_username(name: &str) -> WithUserName {
-        users::username.eq(name)
+    pub fn with_username(name: &str) -> WithName {
+        users::name.eq(name)
     }
 
     pub fn all() -> All {
         users::table.select(users::all_columns)
     }
 
-    pub fn by_username(name: &str) -> ByUserName {
+    pub fn by_username(name: &str) -> ByName {
         Self::all().filter(Self::with_username(name))
     }
 
@@ -84,20 +85,20 @@ impl<'a, 'r> FromRequest<'a, 'r> for User {
 
     fn from_request(request: &'a Request<'r>) -> Outcome<Self, Self::Error> {
         request
-        .guard::<FodMapDatabase>()
-        .map_failure(|_| (Status::InternalServerError, AuthenticationError::DBError))
-        .and_then(|conn| {
-            request
-                .cookies()
-                .get_private("user_id")
-                .and_then(|cookie| cookie.value().parse::<i32>().ok())
-                .as_ref()
-                .and_then(|id| Self::by_id(id).first(&conn.0).ok())
-                .map(|u| Outcome::Success(u))
-                .unwrap_or(Outcome::Failure((
-                    Status::Unauthorized,
-                    AuthenticationError::Invalid,
-                )))
-        })
+            .guard::<FodMapDatabase>()
+            .map_failure(|_| (Status::InternalServerError, AuthenticationError::DBError))
+            .and_then(|conn| {
+                request
+                    .cookies()
+                    .get_private("user_id")
+                    .and_then(|cookie| cookie.value().parse::<i32>().ok())
+                    .as_ref()
+                    .and_then(|id| Self::by_id(id).first(&conn.0).ok())
+                    .map(|u| Outcome::Success(u))
+                    .unwrap_or(Outcome::Failure((
+                        Status::Unauthorized,
+                        AuthenticationError::Invalid,
+                    )))
+            })
     }
 }

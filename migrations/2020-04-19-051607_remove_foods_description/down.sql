@@ -1,2 +1,0 @@
-ALTER TABLE foods
-ADD COLUMN description VARCHAR NOT NULL;

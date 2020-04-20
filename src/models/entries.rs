@@ -1,42 +1,42 @@
 use crate::schema::entries;
-use chrono::naive::NaiveDateTime;
+use chrono::NaiveDateTime;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
+use crate::auth::User;
+use super::paginated::Paginate;
 
 type AllColumns = (
-    entries::entryid,
-    entries::userid,
-    entries::mealentryid,
-    entries::exerciseentryid,
-    entries::sleepentryid,
+    entries::id,
+    entries::user_id,
     entries::timestamp,
+    entries::comments,
 );
 
 pub type All = Select<entries::table, AllColumns>;
 
-pub type WithID<'a> = Eq<entries::entryid, &'a i32>;
+pub type WithID<'a> = Eq<entries::id, &'a i32>;
 pub type ByID<'a> = Filter<All, WithID<'a>>;
 
-pub type WithUserID<'a> = Eq<entries::userid, &'a i32>;
+pub type WithUserID<'a> = Eq<entries::user_id, &'a i32>;
 pub type ByUserID<'a> = Filter<All, WithUserID<'a>>;
 
 pub type WithTimeStamp<'a> = Eq<entries::timestamp, &'a NaiveDateTime>;
 pub type ByTimeStamp<'a> = Filter<All, WithTimeStamp<'a>>;
 
-#[derive(Queryable, Serialize)]
+#[derive(Queryable, Serialize, Identifiable, Associations, PartialEq, Debug)]
+#[table_name = "entries"]
+#[belongs_to(User)]
 pub struct Entry {
     pub id: i32,
-    pub userid: i32,
-    pub mealentryid: i32,
-    pub exerciseentryid: i32,
-    pub sleepentryid: i32,
+    pub user_id: i32,
     pub timestamp: NaiveDateTime,
+    pub comments: Option<String>,
 }
 
 impl Entry {
     pub fn with_id(id: &i32) -> WithID {
-        entries::entryid.eq(id)
+        entries::id.eq(id)
     }
 
     pub fn with_timestamp(timestamp: &NaiveDateTime) -> WithTimeStamp {
@@ -44,7 +44,7 @@ impl Entry {
     }
 
     pub fn with_user_id(id: &i32) -> WithUserID {
-        entries::userid.eq(id)
+        entries::user_id.eq(id)
     }
 
     pub fn all() -> All {

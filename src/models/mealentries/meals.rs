@@ -3,34 +3,29 @@ use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
 
-type AllColumns = (
-    meals::foodid,
-    meals::entryid,
-    meals::qty,
-);
+type AllColumns = (meals::food_id, meals::meal_entry_id);
 
 pub type All = Select<meals::table, AllColumns>;
 
-pub type WithEntryID<'a> = Eq<meals::entryid, &'a i32>;
-pub type ByEntryID<'a> = Filter<All, WithEntryID<'a>>;
+pub type WithMealEntryID<'a> = Eq<meals::meal_entry_id, &'a i32>;
+pub type ByMealEntryID<'a> = Filter<All, WithMealEntryID<'a>>;
 
 #[derive(Queryable, Serialize)]
 pub struct Meal {
-    pub foodid: i32,
-    pub entryid: i32,
-    pub qty: i32,
+    pub food_id: i32,
+    pub meal_entry_id: i32,
 }
 
 impl Meal {
-    pub fn with_entry_id(id: &i32) -> WithEntryID {
-        meals::entryid.eq(id)
+    pub fn with_meal_entry_id(id: &i32) -> WithMealEntryID {
+        meals::meal_entry_id.eq(id)
     }
 
     pub fn all() -> All {
         meals::table.select(meals::all_columns)
     }
 
-    pub fn by_entry_id(id: &i32) -> ByEntryID {
-        Self::all().filter(Self::with_entry_id(id))
+    pub fn by_entry_id(id: &i32) -> ByMealEntryID {
+        Self::all().filter(Self::with_meal_entry_id(id))
     }
 }

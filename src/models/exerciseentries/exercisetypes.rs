@@ -17,12 +17,12 @@ pub type WithName<'a> = Eq<exercisetypes::name, &'a str>;
 pub type ByName<'a> = Filter<All, WithName<'a>>;
 
 #[derive(Queryable, Serialize)]
-pub struct exercisetype {
+pub struct ExerciseType {
     pub id: i32,
     pub name: String,
 }
 
-impl exercisetype {
+impl ExerciseType {
     pub fn with_id(id: &i32) -> WithID {
         exercisetypes::exercisetypeid.eq(id)
     }
