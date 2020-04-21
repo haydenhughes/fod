@@ -24,7 +24,7 @@ pub fn user_login(
     request: Form<NewUser>,
 ) -> Result<Redirect, Status> {
     let user: Result<User, diesel::result::Error> =
-        User::by_username(request.username.as_str()).first(&conn.0);
+        User::by_username(request.name.as_str()).first(&conn.0);
 
     match user {
         Ok(user) => match user.check_password(&request.password) {

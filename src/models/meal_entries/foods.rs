@@ -13,10 +13,7 @@ pub type All = Select<foods::table, AllColumns>;
 pub type WithID<'a> = Eq<foods::id, &'a i32>;
 pub type ByID<'a> = Filter<All, WithID<'a>>;
 
-pub type WithName<'a> = Eq<foods::name, &'a str>;
-pub type ByName<'a> = Filter<All, WithName<'a>>;
-
-#[derive(Queryable, Serialize)]
+#[derive(Queryable, Serialize, Identifiable, PartialEq, Debug)]
 pub struct Food {
     pub id: i32,
     pub name: String,

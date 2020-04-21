@@ -25,7 +25,7 @@ impl ExerciseType {
     }
 
     pub fn all() -> All {
-        exercise_types::table.select(exercisetypes::all_columns)
+        exercise_types::table.select(exercise_types::all_columns)
     }
 
     pub fn by_id(id: &i32) -> ByID {

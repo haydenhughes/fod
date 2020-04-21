@@ -1,9 +1,9 @@
+use super::Entry;
 use crate::schema::sleep_entries;
+use chrono::NaiveDateTime;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
-use chrono::NaiveTime;
-use super::Entry;
 
 type AllColumns = (
     sleep_entries::id,
@@ -22,7 +22,7 @@ pub type ByID<'a> = Filter<All, WithID<'a>>;
 pub struct SleepEntry {
     pub id: i32,
     pub entry_id: i32,
-    pub duration: NaiveTime,
+    pub duration: NaiveDateTime,
 }
 
 impl SleepEntry {

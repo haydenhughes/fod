@@ -7,6 +7,7 @@ use crate::schema::meal_entries;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 pub use foods::Food;
+pub use meals::Meal;
 pub use mealtypes::MealType;
 use serde::Serialize;
 
@@ -27,7 +28,7 @@ pub type ByID<'a> = Filter<All, WithID<'a>>;
 pub struct MealEntry {
     pub id: i32,
     pub entry_id: i32,
-    pub meal_type: i32,
+    pub meal_type_id: i32,
 }
 
 impl MealEntry {
