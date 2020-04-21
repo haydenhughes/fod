@@ -1,11 +1,11 @@
-pub mod exercisetypes;
+pub mod exercise_types;
 
 use super::entries::Entry;
 use crate::schema::exercise_entries;
 use chrono::NaiveDateTime;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
-pub use exercisetypes::ExerciseType;
+pub use exercise_types::ExerciseType;
 use serde::Serialize;
 
 type AllColumns = (

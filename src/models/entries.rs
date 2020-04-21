@@ -4,7 +4,6 @@ use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
 use crate::auth::User;
-use super::paginated::Paginate;
 
 type AllColumns = (
     entries::id,
