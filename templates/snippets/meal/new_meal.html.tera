@@ -75,13 +75,14 @@
           </div>
           <a class="help modal-button" data-target="hunger-modal">What's the Hunger Level Scale?</a>
         </div>
-        <template id="food-item">
-          <div id="item" class="field has-addons">
+
+        <template>
+          <div id="food-item" class="field has-addons">
             <p class="control is-expanded">
-              <input id="food-input" list="foods" class="input" name="" placeholder="Pizza">
+              <input list="foods" class="input" placeholder="Pizza">
             </p>
             <p class="control">
-              <a id="food-delete" class="food-delete button is-danger is-outlined" data-target="">
+              <a class="food-delete button is-danger is-outlined">
                 -
               </a>
             </p>

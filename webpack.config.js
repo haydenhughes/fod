@@ -11,18 +11,18 @@ module.exports = {
     rules: [{
       test: /\.scss$/,
       use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader'
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-              // options...
-            }
+        MiniCssExtractPlugin.loader,
+        {
+          loader: 'css-loader'
+        },
+        {
+          loader: 'sass-loader',
+          options: {
+            sourceMap: true,
+            // options...
           }
-        ]
+        }
+      ]
     },
     {
       test: /\.(woff|woff2|eot|ttf|svg)$/,

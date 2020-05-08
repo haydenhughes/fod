@@ -1,9 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
-  (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
-    $notification = $delete.parentNode;
+// Handle message closing
 
-    $delete.addEventListener('click', () => {
-      $notification.parentNode.removeChild($notification);
-    });
-  });
+$(document).ready(function() {
+  $(".notification > .delete").click(function() {
+    $(this).parent().remove()
+  })
 });

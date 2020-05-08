@@ -28,7 +28,7 @@
           <div class="field">
             <label class="label">Login</label>
             <div class="control has-icons-left">
-              <input type="text" placeholder="Username" class="input {% if failed %} is-danger {% endif %}" name="username">
+              <input type="text" placeholder="Username" class="input {% if failed %} is-danger {% endif %}" name="name">
               <span class="icon is-small is-left">
                 <i class="fa fa-user"></i>
               </span>
