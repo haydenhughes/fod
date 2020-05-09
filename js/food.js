@@ -1,11 +1,4 @@
 // Handle adding and removing food items
-
-function registerDelete() {
-  $(".food-delete").click(function() {
-    $("#" + $(this).data("target")).remove();
-  });
-};
-
 $(document).ready(function() {
   var food_id = 1;
 
@@ -20,6 +13,9 @@ $(document).ready(function() {
 
     food_id++;
 
-    registerDelete();
+    // Register delete
+    $(".food-delete").click(function() {
+      $("#" + $(this).data("target")).remove();
+    });
   });
 });
