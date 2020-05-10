@@ -1,0 +1,5 @@
+<datalist id="foods">
+  {% for food in foods %}
+    <option value="{{ food.name }}">
+  {% endfor %}
+</datalist>

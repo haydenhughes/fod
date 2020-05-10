@@ -1,15 +1,16 @@
 {% extends "base" %}
 
-
 {% block body %}
   {% include "snippets/nav" %}
 
-  {% include "snippets/meal/new_meal" %}
-  {% include "snippets/sleep/new_sleep" %}
-  {% include "snippets/exercise/new_exercise" %}
-  {% include "snippets/meal/meal_types" %}
+  {% include "snippets/new_entry/meal" %}
+  {% include "snippets/new_entry/sleep" %}
+  {% include "snippets/new_entry/exercise" %}
+
   {% include "snippets/meal/foods" %}
+  {% include "snippets/meal/meal_types" %}
   {% include "snippets/exercise/exercise_types" %}
+  {% include "snippets/hunger" %}
 
   <section class="section">
     <div class="container">
@@ -42,8 +43,6 @@
     </div>
   </section>
 
-  {% include "snippets/hunger" %}
-
   <section class="section">
     <div class="container">
       <p class="label">Filter by</p>
@@ -56,10 +55,16 @@
         </ul>
       </div>
 
-      {% for i in [1,2,3,4,5,] %}
-        {% include "snippets/sleep/sleep" %}
-        {% include "snippets/meal/meal" %}
-        {% include "snippets/exercise/exercise" %}
+      {% set id = 0 %}
+
+      {% for entry in entries %}
+        {% if entry.type == "Sleep" %}
+          {{ sleep::entry(entry=entry) }}
+        {% endif %}
+        <!-- {% include "snippets/meal/meal" %} -->
+        <!-- {% include "snippets/exercise/exercise" %} -->
+
+        {% set id = id + 1 %}
       {% endfor %}
     </div>
   </section>
@@ -83,6 +88,4 @@
       </nav>
     </div>
   </section>
-
-  {% include "snippets/confirm_delete" %}
-{% endblock %}
+{% endblock body %}

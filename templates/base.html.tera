@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="/static/fodmap.css">
   </head>
   <body>
-    {% block body %}
-    {% endblock %}
+    {% import "snippets/sleep/sleep" as sleep %}
 
+    {% block body %}
+    {% endblock body %}
     <script src="/static/js/bundle.js" charset="utf-8"></script>
   </body>
 </html>

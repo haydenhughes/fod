@@ -1,0 +1,5 @@
+<datalist id="exercise_types">
+  {% for exercise_type in exercise_types %}
+    <option value="{{ exercise_type.name }}">
+  {% endfor %}
+</datalist>

@@ -1,12 +1,22 @@
-<div id="new-sleep" class="modal">
-  <div class="modal-background" data-target="new-sleep"></div>
+<div id="new-exercise" class="modal">
+  <div class="modal-background" data-target="new-exercise"></div>
   <div class="modal-card">
     <header class="modal-card-head">
-      <p class="modal-card-title">New Sleep Entry</p>
-      <button class="delete" aria-label="close" data-target="new-sleep"></button>
+      <p class="modal-card-title">New Exercise Entry</p>
+      <button class="delete" aria-label="close" data-target="new-exercise"></button>
     </header>
     <section class="modal-card-body">
-      <form id="new-sleep-form" class="form" action="index.html" method="post">
+      <form id="new-exercise-form" class="form" action="index.html" method="post">
+        <div class="field">
+          <label class="label">Exercise type</label>
+          <p class="control has-icons-left">
+            <input list="exercise_types" class="input" name="exercise_type" placeholder="Walk">
+            <span class="icon is-small is-left">
+              <i class="fa fa-bicycle"></i>
+            </span>
+          </p>
+        </div>
+
         <div class="field">
           <label class="label">Start time</label>
           <div class="field-body">
@@ -49,8 +59,8 @@
     </section>
     <footer class="modal-card-foot">
       <div class="control">
-        <input type="submit" class="button is-success" value="Save" form="new-sleep-form">
-        <input type="reset" class="button" form="new-sleep-form" ></input>
+        <input type="submit" class="button is-success" value="Save" form="new-exercise-form">
+        <input type="reset" class="button" form="new-exercise-form" ></input>
       </div>
     </footer>
   </div>

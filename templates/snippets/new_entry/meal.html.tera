@@ -10,7 +10,7 @@
         <div class="field">
           <label class="label">Meal type</label>
           <p class="control has-icons-left">
-            <input list="mealtypes" class="input" name="mealtype" placeholder="Breakfast">
+            <input list="meal_types" class="input" name="meal_type" placeholder="Breakfast">
             <span class="icon is-small is-left">
               <i class="fa fa-fork-awesome"></i>
             </span>
