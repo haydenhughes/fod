@@ -3,10 +3,7 @@ use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
 
-type AllColumns = (
-    exercise_types::id,
-    exercise_types::name,
-);
+type AllColumns = (exercise_types::id, exercise_types::name);
 
 pub type All = Select<exercise_types::table, AllColumns>;
 

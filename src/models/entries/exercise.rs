@@ -1,11 +1,8 @@
-pub mod exercise_types;
-
-use super::entries::Entry;
+use super::Entry;
 use crate::schema::exercise_entries;
 use chrono::NaiveDateTime;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
-pub use exercise_types::ExerciseType;
 use serde::Serialize;
 
 type AllColumns = (
@@ -20,6 +17,7 @@ pub type All = Select<exercise_entries::table, AllColumns>;
 pub type WithID<'a> = Eq<exercise_entries::id, &'a i32>;
 pub type ByID<'a> = Filter<All, WithID<'a>>;
 
+
 #[derive(Queryable, Serialize, Identifiable, Associations, PartialEq, Debug)]
 #[table_name = "exercise_entries"]
 #[belongs_to(Entry)]
@@ -27,7 +25,7 @@ pub struct ExerciseEntry {
     pub id: i32,
     pub entry_id: i32,
     pub exercise_type_id: i32,
-    pub timestamp: NaiveDateTime,
+    pub duration: NaiveDateTime,
 }
 
 impl ExerciseEntry {

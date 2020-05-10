@@ -3,15 +3,13 @@ use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
 
-type AllColumns = (
-    foods::id,
-    foods::name,
-);
+type AllColumns = (foods::id, foods::name);
 
 pub type All = Select<foods::table, AllColumns>;
 
 pub type WithID<'a> = Eq<foods::id, &'a i32>;
 pub type ByID<'a> = Filter<All, WithID<'a>>;
+
 
 #[derive(Queryable, Serialize, Identifiable, PartialEq, Debug)]
 pub struct Food {

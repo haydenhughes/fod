@@ -1,4 +1,4 @@
-use super::MealEntry;
+use crate::models::entries::MealEntry;
 use crate::schema::meals;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
@@ -11,7 +11,7 @@ pub type All = Select<meals::table, AllColumns>;
 pub type WithMealEntryID<'a> = Eq<meals::meal_entry_id, &'a i32>;
 pub type ByMealEntryID<'a> = Filter<All, WithMealEntryID<'a>>;
 
-#[derive(Queryable, Serialize, Identifiable, Associations, PartialEq, Debug)]
+#[derive(Queryable, Insertable, Serialize, Identifiable, Associations, PartialEq, Debug)]
 #[belongs_to(MealEntry)]
 #[primary_key(food_id, meal_entry_id)]
 pub struct Meal {

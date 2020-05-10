@@ -3,10 +3,7 @@ use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
 
-type AllColumns = (
-    meal_types::id,
-    meal_types::name,
-);
+type AllColumns = (meal_types::id, meal_types::name);
 
 pub type All = Select<meal_types::table, AllColumns>;
 

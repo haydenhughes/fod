@@ -1,14 +1,7 @@
-pub mod foods;
-pub mod meals;
-pub mod mealtypes;
-
 use super::Entry;
 use crate::schema::meal_entries;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
-pub use foods::Food;
-pub use meals::Meal;
-pub use mealtypes::MealType;
 use serde::Serialize;
 
 type AllColumns = (
@@ -21,6 +14,7 @@ pub type All = Select<meal_entries::table, AllColumns>;
 
 pub type WithID<'a> = Eq<meal_entries::id, &'a i32>;
 pub type ByID<'a> = Filter<All, WithID<'a>>;
+
 
 #[derive(Queryable, Serialize, Identifiable, Associations, PartialEq, Debug)]
 #[table_name = "meal_entries"]
