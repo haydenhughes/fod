@@ -31,7 +31,7 @@ pub fn user_login(
             Ok(b) => {
                 if b {
                     cookies.add_private(Cookie::new("user_id", user.id.to_string()));
-                    return Ok(Redirect::to(uri!(crate::routes::index)));
+                    return Ok(Redirect::to(uri!(crate::routes::index::index)));
                 } else {
                     return Ok(Redirect::to(uri!(login: failed = true, logout = false)));
                 }

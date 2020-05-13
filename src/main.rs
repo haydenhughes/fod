@@ -97,7 +97,7 @@ fn main() -> io::Result<()> {
             .mount(
                 "/",
                 routes![
-                    routes::index,
+                    routes::index::index,
                     auth::routes::login,
                     auth::routes::user_login,
                     auth::routes::user_logout,
