@@ -1,3 +1,4 @@
+use chrono::NaiveDateTime;
 use crate::schema::exercise_entries;
 
 #[derive(Insertable)]

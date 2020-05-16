@@ -98,6 +98,7 @@ fn main() -> io::Result<()> {
                 "/",
                 routes![
                     routes::index::index,
+                    routes::forms::sleep::new_sleep_entry,
                     auth::routes::login,
                     auth::routes::user_login,
                     auth::routes::user_logout,

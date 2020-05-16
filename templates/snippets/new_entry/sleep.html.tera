@@ -6,18 +6,18 @@
       <button class="delete" aria-label="close" data-target="new-sleep"></button>
     </header>
     <section class="modal-card-body">
-      <form class="form" action="/new_sleep_entry" method="post"> 
+      <form id="new-sleep-form" class="form" action="/sleep_entry" method="post">
         <div class="field">
           <label class="label">Start time</label>
           <div class="field-body">
             <div class="field">
               <p class="control">
-                <input class="input" type="time">
+                <input class="input" type="date" name="start_date">
               </p>
             </div>
             <div class="field">
               <p class="control">
-                <input class="input" type="date">
+                <input class="input" type="time" name="start_time">
               </p>
             </div>
           </div>
@@ -28,12 +28,12 @@
           <div class="field-body">
             <div class="field">
               <p class="control">
-                <input class="input" type="time">
+                <input class="input" type="date" name="end_date">
               </p>
             </div>
             <div class="field">
               <p class="control">
-                <input class="input" type="date">
+                <input class="input" type="time" name="end_time">
               </p>
             </div>
           </div>
@@ -42,7 +42,7 @@
         <div class="field">
           <label class="label">Comments</label>
           <p class="control">
-            <textarea class="textarea" placeholder="e.g. Woke up tired"></textarea>
+            <textarea class="textarea" placeholder="e.g. Woke up tired" name="comments"></textarea>
           </p>
         </div>
       </form>
