@@ -107,7 +107,6 @@
           <button id="add-food" type="button" class="button is-success is-outlined is-small">Add food item</button>
         </div>
 
-
         <div class="field">
           <label class="label">Comments</label>
           <p class="control">

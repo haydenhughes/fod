@@ -7,9 +7,9 @@
   {% include "snippets/new_entry/sleep" %}
   {% include "snippets/new_entry/exercise" %}
 
-  {% include "snippets/meal/foods" %}
-  {% include "snippets/meal/meal_types" %}
-  {% include "snippets/exercise/exercise_types" %}
+  {% include "snippets/types/foods" %}
+  {% include "snippets/types/meal" %}
+  {% include "snippets/types/exercise" %}
   {% include "snippets/hunger" %}
 
   <section class="section">

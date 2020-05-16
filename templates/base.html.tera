@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/fodmap.css">
   </head>
   <body>
-    {% import "snippets/sleep/sleep" as sleep %}
+    {% import "snippets/entries/sleep" as sleep %}
 
     {% block body %}
     {% endblock body %}
