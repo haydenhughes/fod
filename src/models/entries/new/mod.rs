@@ -1,9 +1,9 @@
-mod entry;
-mod exercise;
-mod meal;
-mod sleep;
+mod meta_entry;
+mod exercise_entry;
+mod meal_entry;
+mod sleep_entry;
 
-pub use entry::NewEntry;
-pub use exercise::NewExerciseEntry;
-pub use meal::NewMealEntry;
-pub use sleep::NewSleepEntry;
+pub use meta_entry::NewMetaEntry;
+pub use exercise_entry::NewExerciseEntry;
+pub use meal_entry::NewMealEntry;
+pub use sleep_entry::NewSleepEntry;
