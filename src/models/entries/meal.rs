@@ -1,4 +1,4 @@
-use super::Entry;
+use super::MetaEntry;
 use crate::schema::meal_entries;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
@@ -6,7 +6,7 @@ use serde::Serialize;
 
 type AllColumns = (
     meal_entries::id,
-    meal_entries::entry_id,
+    meal_entries::meta_entry_id,
     meal_entries::meal_type_id,
 );
 
@@ -18,10 +18,10 @@ pub type ByID<'a> = Filter<All, WithID<'a>>;
 
 #[derive(Queryable, Serialize, Identifiable, Associations, PartialEq, Debug)]
 #[table_name = "meal_entries"]
-#[belongs_to(Entry)]
+#[belongs_to(MetaEntry)]
 pub struct MealEntry {
     pub id: i32,
-    pub entry_id: i32,
+    pub meta_entry_id: i32,
     pub meal_type_id: i32,
 }
 

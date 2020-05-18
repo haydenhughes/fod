@@ -1,9 +1,11 @@
-use crate::schema::entries;
+use super::Entry;
+use super::{ExerciseEntry, MealEntry, SleepEntry};
+use crate::auth::User;
+use crate::schema::meta_entries;
 use chrono::NaiveDateTime;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use serde::Serialize;
-use crate::auth::User;
 
 type AllColumns = (
     entries::id,
@@ -26,14 +28,14 @@ pub type ByTimeStamp<'a> = Filter<All, WithTimeStamp<'a>>;
 #[derive(Queryable, Serialize, Identifiable, Associations, PartialEq, Debug)]
 #[table_name = "entries"]
 #[belongs_to(User)]
-pub struct Entry {
+pub struct MetaEntry {
     pub id: i32,
     pub user_id: i32,
     pub timestamp: NaiveDateTime,
     pub comments: Option<String>,
 }
 
-impl Entry {
+impl MetaEntry {
     pub fn with_id(id: &i32) -> WithID {
         entries::id.eq(id)
     }
@@ -60,5 +62,19 @@ impl Entry {
 
     pub fn by_user_id(id: &i32) -> ByUserID {
         Self::all().filter(Self::with_user_id(id))
+    }
+
+    pub fn to_entry(&self, conn: &PgConnection) -> Result<Entry, diesel::result::Error> {
+        let meal_entry = MealEntry::belonging_to(self)
+            .first::<MealEntry>(conn)
+            .map(|e| EntryType::Meal(e));
+        let sleep_entry = SleepEntry::belonging_to(self)
+            .first::<SleepEntry>(conn)
+            .map(|e| EntryType::Sleep(e));
+        let exercise_entry = ExerciseEntry::belonging_to(self)
+            .first::<ExerciseEntry>(conn)
+            .map(|e| EntryType::Exercise(e));
+
+        meal_entry.or(sleep_entry).or(exercise_entry)
     }
 }

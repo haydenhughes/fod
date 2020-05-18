@@ -1,4 +1,4 @@
-use super::Entry;
+use super::MetaEntry;
 use crate::schema::sleep_entries;
 use chrono::NaiveDateTime;
 use diesel::dsl::{Eq, Filter, Select};
@@ -18,10 +18,10 @@ pub type ByID<'a> = Filter<All, WithID<'a>>;
 
 #[derive(Queryable, Serialize, Identifiable, Associations, PartialEq, Debug)]
 #[table_name = "sleep_entries"]
-#[belongs_to(Entry)]
+#[belongs_to(MetaEntry)]
 pub struct SleepEntry {
     pub id: i32,
-    pub entry_id: i32,
+    pub meta_entry_id: i32,
     pub duration: NaiveDateTime,
 }
 

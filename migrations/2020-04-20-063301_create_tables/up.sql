@@ -19,7 +19,7 @@ CREATE TABLE users (
   password VARCHAR NOT NULL
 );
 
-CREATE TABLE entries (
+CREATE TABLE meta_entries (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users (id) NOT NULL,
   timestamp TIMESTAMP NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE entries (
 
 CREATE TABLE meal_entries (
   id SERIAL PRIMARY KEY,
-  entry_id INTEGER REFERENCES entries (id) NOT NULL,
+  meta_entry_id INTEGER REFERENCES meta_entries (id) NOT NULL,
   meal_type_id INTEGER REFERENCES meal_types (id) NOT NULL
 );
 
@@ -40,13 +40,13 @@ CREATE TABLE meals (
 
 CREATE TABLE exercise_entries (
   id SERIAL PRIMARY KEY,
-  entry_id INTEGER REFERENCES entries (id) NOT NULL,
+  meta_entry_id INTEGER REFERENCES meta_entries (id) NOT NULL,
   exercise_type_id INTEGER REFERENCES exercise_types (id) NOT NULL,
   duration TIMESTAMP NOT NULL
 );
 
 CREATE TABLE sleep_entries (
   id SERIAL PRIMARY KEY,
-  entry_id INTEGER REFERENCES entries (id) NOT NULL,
+  meta_entry_id INTEGER REFERENCES meta_entries (id) NOT NULL,
   duration TIMESTAMP NOT NULL
 )
