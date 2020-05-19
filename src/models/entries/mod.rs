@@ -8,9 +8,10 @@ pub use exercise_entry::ExerciseEntry;
 pub use meal_entry::MealEntry;
 pub use meta_entry::MetaEntry;
 pub use sleep_entry::SleepEntry;
+use super::Meal;
 
 pub enum Entry {
     Sleep(MetaEntry, SleepEntry),
-    Meal(MetaEntry, MealEntry),
+    Meal(MetaEntry, MealEntry, Food),
     Exercise(MetaEntry, ExerciseEntry),
 }

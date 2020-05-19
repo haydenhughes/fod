@@ -8,8 +8,8 @@
       </div>
       <div class="media-content">
         <div class="content">
-          <strong>8 Hours</strong> <br>
-          <small>23:00</small> <small>February 2, 2020</small>
+          <strong>{{entry.duration}} Hours</strong> <br>
+          <small>{{entry.start_time}}</small> <small>{{entry.end_time}}</small>
         </div>
       </div>
       <div class="media-right">
@@ -30,8 +30,8 @@
           </figure>
           <div class="media-content">
             <p class="modal-card-title">
-              <strong>8 Hours</strong> <br>
-              <small>23:00</small> <small>February 2, 2020</small>
+              <strong>{{entry.duration}} Hours</strong> <br>
+              <small>{{entry.start_time}}</small> <small>{{entry.start_date}}</small>
             </p>
           </div>
         </article>
@@ -47,9 +47,9 @@
             </thead>
             <tbody>
               <tr>
-                <td>23:00 - February 2, 2020</td>
-                <td>7:00 - February 3, 2020</td>
-                <td>8:00</td>
+                <td>{{entry.start_time}} - {{entry.start_date}}</td>
+                <td>{{entry.end_time}} - {{entry.end_date}}</td>
+                <td>{{entry.duration}}</td>
               </tr>
             </tbody>
           </table>
@@ -59,7 +59,7 @@
             </thead>
             <tbody>
               <tr>
-                <td>entry.sleep.comments</td>
+                <td>entry.comments</td>
               </tr>
             </tbody>
           </table>

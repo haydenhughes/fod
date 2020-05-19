@@ -54,17 +54,10 @@
           <li><a>Month</a></li>
         </ul>
       </div>
-
-      {% set id = 0 %}
-
       {% for entry in entries %}
         {% if entry.type == "Sleep" %}
-          {{ sleep::entry(entry=entry) }}
+          {{ sleep::entry(entry=entry.content) }}
         {% endif %}
-        <!-- {% include "snippets/meal/meal" %} -->
-        <!-- {% include "snippets/exercise/exercise" %} -->
-
-        {% set id = id + 1 %}
       {% endfor %}
     </div>
   </section>

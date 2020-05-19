@@ -65,13 +65,13 @@ impl MetaEntry {
     }
 
     pub fn to_entry(self, conn: &PgConnection) -> Result<Entry, diesel::result::Error> {
-        let meal_entry = MealEntry::belonging_to(self)
+        let meal_entry = MealEntry::belonging_to(&self)
             .first::<MealEntry>(conn)
             .map(|e| Entry::Meal(self, e));
-        let sleep_entry = SleepEntry::belonging_to(self)
+        let sleep_entry = SleepEntry::belonging_to(&self)
             .first::<SleepEntry>(conn)
             .map(|e| Entry::Sleep(self, e));
-        let exercise_entry = ExerciseEntry::belonging_to(self)
+        let exercise_entry = ExerciseEntry::belonging_to(&self)
             .first::<ExerciseEntry>(conn)
             .map(|e| Entry::Exercise(self, e));
 
