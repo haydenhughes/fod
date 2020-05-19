@@ -1,5 +1,0 @@
-<datalist id="meal_types">
-  {% for meal_type in meal_types %}
-    <option value="{{ meal_type.name }}">
-  {% endfor %}
-</datalist>
