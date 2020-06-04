@@ -1,4 +1,4 @@
-use super::FodmapDbConn;
+use crate::FodmapDbConn;
 use crate::models::{NewUser, User};
 use crate::schema;
 use fodmap_common::Session;
@@ -14,7 +14,7 @@ pub fn create_session(
     mut cookies: Cookies,
     session: Json<Session>,
 ) -> Result<status::Accepted<&str>, status::Unauthorized<&str>> {
-    User::by_user_name(&session.user_name)
+    User::by_name(&session.user_name)
         .get_result::<User>(&*conn)
         .map_err(|e| {
             warn!("Unable to authenticate user: {}", e);

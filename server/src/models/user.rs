@@ -1,10 +1,10 @@
-use super::FodmapDbConn;
 use crate::schema::users;
+use crate::FodmapDbConn;
 use argon2::{self, Config};
-use fodmap_common::Session;
 use diesel::dsl::{Eq, Filter, Select};
 use diesel::prelude::*;
 use diesel::{Insertable, Queryable};
+use fodmap_common::Session;
 use getrandom::getrandom;
 use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
@@ -18,12 +18,6 @@ type ByID<'a> = Filter<All, WithID<'a>>;
 
 type WithName<'a> = Eq<users::name, &'a str>;
 type ByName<'a> = Filter<All, WithName<'a>>;
-
-#[derive(Debug)]
-pub enum AuthenticationError {
-    DBError,
-    Invalid,
-}
 
 #[derive(Insertable)]
 #[table_name = "users"]
@@ -62,7 +56,7 @@ impl User {
     }
 
     pub fn with_name(name: &str) -> WithName {
-        users::user_name.eq(name)
+        users::name.eq(name)
     }
 
     pub fn all() -> All {

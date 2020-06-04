@@ -15,9 +15,9 @@ fn main() {
         .mount(
             "/auth/api",
             routes![
-                routes::create_session,
-                routes::delete_session,
-                routes::create_user
+                routes::auth::create_session,
+                routes::auth::delete_session,
+                routes::auth::create_user
             ],
         )
         .mount(
