@@ -9,14 +9,14 @@ use getrandom::getrandom;
 use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
 
-type AllColumns = (users::id, users::user_name, users::password);
+type AllColumns = (users::id, users::name, users::password);
 
 type All = Select<users::table, AllColumns>;
 
 type WithID<'a> = Eq<users::id, &'a i32>;
 type ByID<'a> = Filter<All, WithID<'a>>;
 
-type WithName<'a> = Eq<users::user_name, &'a str>;
+type WithName<'a> = Eq<users::name, &'a str>;
 type ByName<'a> = Filter<All, WithName<'a>>;
 
 #[derive(Debug)]
@@ -52,7 +52,7 @@ impl From<Session> for NewUser {
 #[derive(Queryable)]
 pub struct User {
     pub id: i32,
-    pub user_name: String,
+    pub name: String,
     pub password: String,
 }
 
@@ -61,7 +61,7 @@ impl User {
         users::id.eq(id)
     }
 
-    pub fn with_user_name(name: &str) -> WithName {
+    pub fn with_name(name: &str) -> WithName {
         users::user_name.eq(name)
     }
 
@@ -69,8 +69,8 @@ impl User {
         users::table.select(users::all_columns)
     }
 
-    pub fn by_user_name(name: &str) -> ByName {
-        Self::all().filter(Self::with_user_name(name))
+    pub fn by_name(name: &str) -> ByName {
+        Self::all().filter(Self::with_name(name))
     }
 
     pub fn by_id(id: &i32) -> ByID {
