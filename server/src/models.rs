@@ -28,14 +28,14 @@ pub enum AuthenticationError {
 #[derive(Insertable)]
 #[table_name = "users"]
 pub struct NewUser {
-    user_name: String,
+    name: String,
     password: String,
 }
 
 impl From<Session> for NewUser {
     fn from(s: Session) -> Self {
         NewUser {
-            user_name: s.user_name,
+            name: s.user_name,
             password: {
                 let salt = {
                     let mut s = [0u8; 16];
