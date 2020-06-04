@@ -1,0 +1,13 @@
+[package]
+name = "fodmap_client"
+version = "0.1.0"
+authors = ["Hayden Hughes <hayden@foxes.systems>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2.45"
+seed = "0.7.0"
+fodmap_common = { path = "../common" }
