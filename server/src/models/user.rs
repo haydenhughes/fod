@@ -1,7 +1,8 @@
+use super::All;
 use crate::schema::users;
 use crate::FodmapDbConn;
 use argon2::{self, Config};
-use diesel::dsl::{Eq, Filter, Select};
+use diesel::dsl::{Eq, Filter};
 use diesel::prelude::*;
 use diesel::{Insertable, Queryable};
 use fodmap_common::Session;
@@ -9,15 +10,11 @@ use getrandom::getrandom;
 use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
 
-type AllColumns = (users::id, users::name, users::password);
-
-type All = Select<users::table, AllColumns>;
-
 type WithID<'a> = Eq<users::id, &'a i32>;
-type ByID<'a> = Filter<All, WithID<'a>>;
+type ByID<'a> = Filter<All<users::table>, WithID<'a>>;
 
 type WithName<'a> = Eq<users::name, &'a str>;
-type ByName<'a> = Filter<All, WithName<'a>>;
+type ByName<'a> = Filter<All<users::table>, WithName<'a>>;
 
 #[derive(Insertable)]
 #[table_name = "users"]
@@ -51,7 +48,7 @@ pub struct User {
 }
 
 impl User {
-    pub fn all() -> All {
+    pub fn all() -> All<users::table> {
         users::table.select(users::all_columns)
     }
 
