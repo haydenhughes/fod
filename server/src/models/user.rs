@@ -51,6 +51,10 @@ pub struct User {
 }
 
 impl User {
+    pub fn all() -> All {
+        users::table.select(users::all_columns)
+    }
+
     pub fn with_id(id: &i32) -> WithID {
         users::id.eq(id)
     }
@@ -59,16 +63,12 @@ impl User {
         users::name.eq(name)
     }
 
-    pub fn all() -> All {
-        users::table.select(users::all_columns)
+    pub fn by_id(id: &i32) -> ByID {
+        Self::all().filter(Self::with_id(id))
     }
 
     pub fn by_name(name: &str) -> ByName {
         Self::all().filter(Self::with_name(name))
-    }
-
-    pub fn by_id(id: &i32) -> ByID {
-        Self::all().filter(Self::with_id(id))
     }
 
     pub fn is_password<S: AsRef<[u8]>>(&self, password: S) -> bool {
