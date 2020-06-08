@@ -56,12 +56,12 @@ impl User {
         users::id.eq(id)
     }
 
-    pub fn with_name(name: &str) -> WithName {
-        users::name.eq(name)
-    }
-
     pub fn by_id(id: &i32) -> ByID {
         Self::all().filter(Self::with_id(id))
+    }
+
+    pub fn with_name(name: &str) -> WithName {
+        users::name.eq(name)
     }
 
     pub fn by_name(name: &str) -> ByName {
