@@ -40,7 +40,7 @@ impl From<Session> for NewUser {
     }
 }
 
-#[derive(Queryable)]
+#[derive(Identifiable, Queryable)]
 pub struct User {
     pub id: i32,
     pub name: String,
