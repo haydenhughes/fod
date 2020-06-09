@@ -7,6 +7,9 @@ use serde::{Serialize, Deserialize};
 type WithID<'a> = Eq<meal_types::id, &'a i32>;
 type ByID<'a> = Filter<All<meal_types::table>, WithID<'a>>;
 
+type WithName<'a> = Eq<meal_types::name, &'a str>;
+type ByName<'a> = Filter<All<meal_types::table>, WithName<'a>>;
+
 #[derive(Insertable, AsChangeset, Serialize, Deserialize)]
 #[table_name = "meal_types"]
 pub struct NewMealType {
@@ -36,5 +39,13 @@ impl MealType {
 
     pub fn by_id(id: &i32) -> ByID {
         Self::all().filter(Self::with_id(id))
+    }
+
+    pub fn with_name(name: &str) -> WithName {
+        meal_types::name.eq(name)
+    }
+
+    pub fn by_name(name: &str) -> ByName {
+        Self::all().filter(Self::with_name(name))
     }
 }
