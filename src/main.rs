@@ -21,6 +21,14 @@ fn main() {
             ],
         )
         .mount(
+            "/api/entries",
+            routes![
+                routes::entries::list_entries,
+                routes::entries::get_entry,
+                routes::entries::create_entry
+            ],
+        )
+        .mount(
             "/api/meal_types",
             routes![
                 routes::meal_types::list_meal_types,

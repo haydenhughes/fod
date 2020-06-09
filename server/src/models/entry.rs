@@ -3,13 +3,22 @@ use crate::schema::entries;
 use chrono::NaiveDateTime;
 use diesel::dsl::{Eq, Filter};
 use diesel::prelude::*;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 
 type WithID<'a> = Eq<entries::id, &'a i32>;
 type ByID<'a> = Filter<All<entries::table>, WithID<'a>>;
 
 type WithUser<'a> = Eq<entries::user_id, &'a i32>;
 type ByUser<'a> = Filter<All<entries::table>, WithUser<'a>>;
+
+#[derive(Insertable, AsChangeset, Serialize, Deserialize)]
+#[table_name = "entries"]
+pub struct NewEntry {
+    pub user_id: i32,
+    pub meal_type_id: i32,
+    pub timestamp: NaiveDateTime,
+    pub comments: Option<String>,
+}
 
 #[derive(Identifiable, Queryable, Associations, Serialize)]
 #[belongs_to(User)]
