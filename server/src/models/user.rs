@@ -24,10 +24,10 @@ pub struct NewUser {
     pub password: String,
 }
 
-impl<'a> From<Session<'a>> for NewUser {
+impl From<Session> for NewUser {
     fn from(s: Session) -> Self {
         NewUser {
-            name: s.name.to_string(),
+            name: s.name,
             password: {
                 let salt = {
                     let mut s = [0u8; 16];

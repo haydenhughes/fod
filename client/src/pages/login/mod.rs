@@ -48,8 +48,8 @@ pub fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
             let request = Request::new("/api/auth/sessions")
                 .method(Method::Post)
                 .json(&Session {
-                    name: &model.user_name,
-                    password: &model.password,
+                    name: model.user_name,
+                    password: model.password,
                 })
                 .expect("Unable to serialize data");
 

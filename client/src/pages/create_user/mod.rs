@@ -16,8 +16,8 @@ pub struct Model {
 impl Model {
     pub fn to_session(&self) -> Session {
         Session {
-            name: &self.user_name,
-            password: &self.password,
+            name: self.user_name,
+            password: self.password,
         }
     }
 }
