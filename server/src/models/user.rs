@@ -5,10 +5,10 @@ use argon2::{self, Config};
 use diesel::dsl::{Eq, Filter};
 use diesel::prelude::*;
 use diesel::{Insertable, Queryable};
-use fodmap_common::Session;
 use getrandom::getrandom;
 use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
+use serde::{Serialize, Deserialize};
 
 type WithID<'a> = Eq<users::id, &'a i32>;
 type ByID<'a> = Filter<All<users::table>, WithID<'a>>;
@@ -16,24 +16,24 @@ type ByID<'a> = Filter<All<users::table>, WithID<'a>>;
 type WithName<'a> = Eq<users::name, &'a str>;
 type ByName<'a> = Filter<All<users::table>, WithName<'a>>;
 
-#[derive(Insertable)]
+#[derive(Insertable, Serialize, Deserialize)]
 #[table_name = "users"]
 pub struct NewUser {
-    name: String,
-    password: String,
+    pub name: String,
+    pub password: String,
 }
 
-impl From<Session> for NewUser {
-    fn from(s: Session) -> Self {
+impl NewUser {
+    pub fn new(name: &str, password: &str) -> Self {
         NewUser {
-            name: s.user_name,
+            name: name.to_string(),
             password: {
                 let salt = {
                     let mut s = [0u8; 16];
                     getrandom(&mut s).map(|_| s)
                 }
                 .expect("Unable to get random data for salt");
-                argon2::hash_encoded(s.password.as_bytes(), &salt, &Config::default())
+                argon2::hash_encoded(password.as_bytes(), &salt, &Config::default())
                     .expect("Unable to hash password")
             },
         }

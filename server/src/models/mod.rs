@@ -12,4 +12,5 @@ pub use meal::Meal;
 pub use meal_type::MealType;
 pub use user::{NewUser, User};
 
+pub type Session = NewUser;
 type All<T: Table> = Select<T, T::AllColumns>;

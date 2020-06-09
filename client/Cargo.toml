@@ -10,4 +10,4 @@ crate-type = ["cdylib"]
 [dependencies]
 wasm-bindgen = "0.2.45"
 seed = "0.7.0"
-fodmap_common = { path = "../common" }
+fodmap_server = { path = "../server" }

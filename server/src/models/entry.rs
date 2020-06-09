@@ -1,9 +1,9 @@
-use super::All;
-use super::User;
+use super::{All, User};
 use crate::schema::entries;
 use chrono::NaiveDateTime;
 use diesel::dsl::{Eq, Filter};
 use diesel::prelude::*;
+use serde::Serialize;
 
 type WithID<'a> = Eq<entries::id, &'a i32>;
 type ByID<'a> = Filter<All<entries::table>, WithID<'a>>;
@@ -11,7 +11,7 @@ type ByID<'a> = Filter<All<entries::table>, WithID<'a>>;
 type WithUser<'a> = Eq<entries::user_id, &'a i32>;
 type ByUser<'a> = Filter<All<entries::table>, WithUser<'a>>;
 
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations, Serialize)]
 #[belongs_to(User)]
 #[table_name = "entries"]
 pub struct Entry {

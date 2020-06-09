@@ -1,7 +1,6 @@
 use crate::FodmapDbConn;
-use crate::models::{NewUser, User};
+use crate::models::{Session, NewUser, User};
 use crate::schema;
-use fodmap_common::Session;
 use diesel::prelude::*;
 use log::warn;
 use rocket::http::{Cookie, Cookies};
@@ -13,8 +12,8 @@ pub fn create_session(
     conn: FodmapDbConn,
     mut cookies: Cookies,
     session: Json<Session>,
-) -> Result<status::Accepted<&str>, status::Unauthorized<&str>> {
-    User::by_name(&session.user_name)
+) -> Result<status::Accepted<&'static str>, status::Unauthorized<&'static str>> {
+    User::by_name(&session.name)
         .get_result::<User>(&*conn)
         .map_err(|e| {
             warn!("Unable to authenticate user: {}", e);
@@ -36,13 +35,13 @@ pub fn delete_session(mut cookies: Cookies) -> status::NoContent {
     status::NoContent
 }
 
-#[post("/users", data = "<session>")]
-pub fn create_user<'a>(
+#[post("/users", data = "<user>")]
+pub fn create_user(
     conn: FodmapDbConn,
-    session: Json<Session>,
-) -> Result<status::NoContent, status::Conflict<&'a str>> {
+    user: Json<NewUser>,
+) -> Result<status::NoContent, status::Conflict<&'static str>> {
     diesel::insert_into(schema::users::table)
-        .values(NewUser::from(session.into_inner()))
+        .values(user.into_inner())
         .execute(&*conn)
         .map(|_| status::NoContent)
         .map_err(|e| {
