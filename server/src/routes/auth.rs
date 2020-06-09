@@ -1,7 +1,8 @@
-use crate::FodmapDbConn;
-use crate::models::{Session, NewUser, User};
+use crate::models::{NewUser, User};
 use crate::schema;
+use crate::FodmapDbConn;
 use diesel::prelude::*;
+use fodmap_common::Session;
 use rocket::http::{Cookie, Cookies};
 use rocket::response::status;
 use rocket_contrib::json::Json;
@@ -34,13 +35,13 @@ pub fn delete_session(mut cookies: Cookies) -> status::NoContent {
     status::NoContent
 }
 
-#[post("/users", data = "<user>")]
+#[post("/users", data = "<session>")]
 pub fn create_user(
     conn: FodmapDbConn,
-    user: Json<NewUser>,
+    session: Json<Session>,
 ) -> Result<status::NoContent, status::Conflict<&'static str>> {
     diesel::insert_into(schema::users::table)
-        .values(user.into_inner().hash())
+        .values(NewUser::from(session.into_inner()))
         .execute(&*conn)
         .map(|_| status::NoContent)
         .map_err(|e| {

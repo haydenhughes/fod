@@ -9,6 +9,7 @@ use getrandom::getrandom;
 use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
 use serde::{Deserialize, Serialize};
+use fodmap_common::Session;
 
 type WithID<'a> = Eq<users::id, &'a i32>;
 type ByID<'a> = Filter<All<users::table>, WithID<'a>>;
@@ -23,17 +24,17 @@ pub struct NewUser {
     pub password: String,
 }
 
-impl NewUser {
-    pub fn hash(self) -> Self {
+impl<'a> From<Session<'a>> for NewUser {
+    fn from(s: Session) -> Self {
         NewUser {
-            name: self.name,
+            name: s.name.to_string(),
             password: {
                 let salt = {
                     let mut s = [0u8; 16];
                     getrandom(&mut s).map(|_| s)
                 }
                 .expect("Unable to get random data for salt");
-                argon2::hash_encoded(self.password.as_bytes(), &salt, &Config::default())
+                argon2::hash_encoded(s.password.as_bytes(), &salt, &Config::default())
                     .expect("Unable to hash password")
             },
         }

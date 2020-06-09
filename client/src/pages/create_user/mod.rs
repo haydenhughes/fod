@@ -1,6 +1,6 @@
 mod components;
 
-use crate::models::Session;
+use fodmap_common::Session;
 use crate::Urls;
 use seed::prelude::*;
 

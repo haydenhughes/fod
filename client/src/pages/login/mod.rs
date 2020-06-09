@@ -1,6 +1,7 @@
 mod components;
 
-use crate::models::Session;
+use fodmap_common::Session;
+use crate::Urls;
 use seed::prelude::*;
 
 #[derive(Clone)]
@@ -68,7 +69,7 @@ pub fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
         }
         Msg::DeleteNotification => model.is_valid = true,
 
-        Msg::LoginSucceded => log!("Logged in"),
+        Msg::LoginSucceded => Urls::new(model.base_url).home().go_and_load(),
         Msg::LoginFailed => model.is_valid = false,
     }
 }
