@@ -2,7 +2,6 @@ use crate::FodmapDbConn;
 use crate::models::{Session, NewUser, User};
 use crate::schema;
 use diesel::prelude::*;
-use log::warn;
 use rocket::http::{Cookie, Cookies};
 use rocket::response::status;
 use rocket_contrib::json::Json;
