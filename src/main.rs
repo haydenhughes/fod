@@ -13,7 +13,7 @@ fn main() {
     rocket::ignite()
         .attach(FodmapDbConn::fairing())
         .mount(
-            "/auth/api",
+            "/api/auth",
             routes![
                 routes::auth::create_session,
                 routes::auth::delete_session,
