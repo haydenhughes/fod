@@ -13,7 +13,7 @@ type ByName<'a> = Filter<All<meal_types::table>, WithName<'a>>;
 #[derive(Insertable, AsChangeset, Serialize, Deserialize)]
 #[table_name = "meal_types"]
 pub struct NewMealType {
-    name: String,
+    pub name: String,
 }
 
 impl NewMealType {
