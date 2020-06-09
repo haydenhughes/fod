@@ -2,11 +2,24 @@ use super::All;
 use crate::schema::meal_types;
 use diesel::dsl::{Eq, Filter};
 use diesel::prelude::*;
+use serde::{Serialize, Deserialize};
 
 type WithID<'a> = Eq<meal_types::id, &'a i32>;
 type ByID<'a> = Filter<All<meal_types::table>, WithID<'a>>;
 
-#[derive(Queryable)]
+#[derive(Insertable, AsChangeset, Serialize, Deserialize)]
+#[table_name = "meal_types"]
+pub struct NewMealType {
+    name: String,
+}
+
+impl NewMealType {
+    pub fn new<S: Into<String>>(name: S) -> Self {
+        NewMealType { name: name.into() }
+    }
+}
+
+#[derive(Identifiable, Queryable, Serialize, Deserialize)]
 pub struct MealType {
     pub id: i32,
     pub name: String,

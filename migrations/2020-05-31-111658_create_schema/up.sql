@@ -17,8 +17,8 @@ CREATE TABLE users (
 
 CREATE TABLE entries (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users (id) NOT NULL,
-  meal_type_id INTEGER REFERENCES meal_types (id) NOT NULL,
+  user_id INTEGER REFERENCES users (id) ON DELETE CASCADE NOT NULL,
+  meal_type_id INTEGER REFERENCES meal_types (id) ON DELETE RESTRICT NOT NULL,
   timestamp TIMESTAMP NOT NULL,
   comments VARCHAR
 );

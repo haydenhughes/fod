@@ -21,6 +21,15 @@ fn main() {
             ],
         )
         .mount(
+            "/api/meal_types",
+            routes![
+                routes::meal_types::list_meal_types,
+                routes::meal_types::get_meal_type,
+                routes::meal_types::update_meal_type,
+                routes::meal_types::delete_meal_type
+            ],
+        )
+        .mount(
             "/login",
             StaticFiles::new("client/dist", Options::NormalizeDirs | Options::Index),
         )
