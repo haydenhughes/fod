@@ -40,7 +40,7 @@ pub fn create_user(
     user: Json<NewUser>,
 ) -> Result<status::NoContent, status::Conflict<&'static str>> {
     diesel::insert_into(schema::users::table)
-        .values(user.into_inner())
+        .values(user.into_inner().hash())
         .execute(&*conn)
         .map(|_| status::NoContent)
         .map_err(|e| {

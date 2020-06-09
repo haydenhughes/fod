@@ -8,7 +8,7 @@ use diesel::{Insertable, Queryable};
 use getrandom::getrandom;
 use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 type WithID<'a> = Eq<users::id, &'a i32>;
 type ByID<'a> = Filter<All<users::table>, WithID<'a>>;
@@ -24,16 +24,16 @@ pub struct NewUser {
 }
 
 impl NewUser {
-    pub fn new(name: &str, password: &str) -> Self {
+    pub fn hash(self) -> Self {
         NewUser {
-            name: name.to_string(),
+            name: self.name,
             password: {
                 let salt = {
                     let mut s = [0u8; 16];
                     getrandom(&mut s).map(|_| s)
                 }
                 .expect("Unable to get random data for salt");
-                argon2::hash_encoded(password.as_bytes(), &salt, &Config::default())
+                argon2::hash_encoded(self.password.as_bytes(), &salt, &Config::default())
                     .expect("Unable to hash password")
             },
         }
