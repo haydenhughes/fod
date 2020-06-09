@@ -10,4 +10,5 @@ crate-type = ["cdylib"]
 [dependencies]
 wasm-bindgen = "0.2.45"
 seed = "0.7.0"
-fodmap_server = { path = "../server" }
+chrono = { version = "0.4.11", features = ["serde"] }
+serde = { version = "1.0.111", features = ["derive"] }
