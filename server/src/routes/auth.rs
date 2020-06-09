@@ -21,7 +21,7 @@ pub fn create_session(
         .and_then(|user| {
             user.is_password(&session.password)
                 .then_some({
-                    cookies.add_private(Cookie::new("session_id", user.id.to_string()));
+                    cookies.add_private(Cookie::new("user_id", user.id.to_string()));
                     status::Accepted(Some("Logged in successfully"))
                 })
                 .ok_or(status::Unauthorized(Some("Invalid user name or password")))
@@ -30,7 +30,7 @@ pub fn create_session(
 
 #[delete("/sessions")]
 pub fn delete_session(mut cookies: Cookies) -> status::NoContent {
-    cookies.remove(Cookie::named("session_id"));
+    cookies.remove(Cookie::named("user_id"));
     status::NoContent
 }
 

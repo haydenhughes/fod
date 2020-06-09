@@ -84,7 +84,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for User {
             .map(|conn| {
                 request
                     .cookies()
-                    .get_private("session_id")
+                    .get_private("user_id")
                     .and_then(|cookie| cookie.value().parse::<i32>().ok())
                     .as_ref()
                     .and_then(|id| Self::by_id(id).first(&*conn).ok())
