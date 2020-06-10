@@ -1,3 +1,7 @@
+//! # FodMap Server
+//!
+//! Provides all the required functions and types to run the FodMap API.
+
 #![feature(proc_macro_hygiene, decl_macro, bool_to_option)]
 
 #[macro_use]

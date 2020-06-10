@@ -1,3 +1,8 @@
+//! # FodMap
+//!
+//! Provides a binary to run the FodMap server which hooks into the functions exposed by
+//! `fodmap_server` and serves the static files out of `fodmap_client`.
+
 #![feature(proc_macro_hygiene, decl_macro)]
 
 #[macro_use]

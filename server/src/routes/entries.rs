@@ -6,6 +6,10 @@ use fodmap_common::CreateEntry;
 use rocket::response::status;
 use rocket_contrib::json::Json;
 
+/// Creates a NewEntry from a CreateEntry
+///
+/// This function handles getting a MealType id from the given meal type string. If a meal type
+/// with the required name doesn't exist yet, it'll create one.
 fn create_new_entry(user: &User, conn: &PgConnection, entry: &Json<CreateEntry>) -> NewEntry {
     NewEntry {
         user_id: user.id,
