@@ -33,14 +33,14 @@ pub fn get_meal_type(
     }
 }
 
-#[post("/", data = "<meal_type>")]
+#[post("/", data = "<content>")]
 pub fn create_meal_type(
     _user: User,
     conn: FodmapDbConn,
-    meal_type: Json<CreateMealType>,
+    content: Json<CreateMealType>,
 ) -> Result<status::Created<Json<MealType>>, status::Conflict<&'static str>> {
     diesel::insert_into(meal_types::table)
-        .values(models::NewMealType::from(meal_type.into_inner()))
+        .values(models::NewMealType::from(content.into_inner()))
         .get_result::<models::MealType>(&*conn)
         .map(|r| r.to_api())
         .map(Json)
@@ -51,12 +51,12 @@ pub fn create_meal_type(
         })
 }
 
-#[put("/<id>", data = "<update>")]
+#[put("/<id>", data = "<content>")]
 pub fn update_meal_type(
     _user: User,
     conn: FodmapDbConn,
     id: i32,
-    update: Json<CreateMealType>,
+    content: Json<CreateMealType>,
 ) -> Result<Json<MealType>, status::NotFound<&'static str>> {
     models::MealType::by_id(&id)
         .get_result::<models::MealType>(&*conn)
@@ -66,7 +66,7 @@ pub fn update_meal_type(
         })
         .map(|meal_type| {
             diesel::update(&meal_type)
-                .set(models::NewMealType::from(update.into_inner()))
+                .set(models::NewMealType::from(content.into_inner()))
                 .get_result::<models::MealType>(&*conn)
                 .map(|r| r.to_api())
                 .map(Json)
