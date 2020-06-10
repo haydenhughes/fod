@@ -14,6 +14,8 @@ use fodmap_server::{routes, FodmapDbConn};
 use rocket_contrib::serve::Options;
 use rocket_contrib::serve::StaticFiles;
 
+// TODO: Default credentials so that the admin can create users
+
 fn main() {
     rocket::ignite()
         .attach(FodmapDbConn::fairing())

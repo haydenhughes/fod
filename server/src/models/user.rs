@@ -8,7 +8,7 @@ use diesel::{Insertable, Queryable};
 use getrandom::getrandom;
 use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use fodmap_common::Session;
 
 type WithID<'a> = Eq<users::id, &'a i32>;
@@ -17,7 +17,7 @@ type ByID<'a> = Filter<All<users::table>, WithID<'a>>;
 type WithName<'a> = Eq<users::name, &'a str>;
 type ByName<'a> = Filter<All<users::table>, WithName<'a>>;
 
-#[derive(Insertable, Serialize, Deserialize)]
+#[derive(Insertable, AsChangeset)]
 #[table_name = "users"]
 pub struct NewUser {
     pub name: String,
@@ -43,7 +43,7 @@ impl From<Session> for NewUser {
 
 /// When used as a rocket request guard, the User model will check to see if the current request
 /// is authenticated.
-#[derive(Identifiable, Queryable)]
+#[derive(Identifiable, Queryable, Serialize)]
 pub struct User {
     pub id: i32,
     pub name: String,
