@@ -1,43 +1,50 @@
-use crate::models::{MealType, NewMealType, User};
+use crate::models::{self, User};
 use crate::schema::meal_types;
 use crate::FodmapDbConn;
 use diesel::prelude::*;
+use fodmap_common::{CreateMealType, MealType};
 use rocket::response::status;
 use rocket_contrib::json::Json;
-
-#[get("/")]
-pub fn list_meal_types(_user: User, conn: FodmapDbConn) -> Json<Vec<MealType>> {
-    MealType::all()
-        .get_results(&*conn)
-        .map(|r| Json(r))
-        .expect("Unable to query meal types")
-}
 
 #[get("/<id>")]
 pub fn get_meal_type(
     _user: User,
     conn: FodmapDbConn,
-    id: i32,
-) -> Result<Json<MealType>, status::NotFound<&'static str>> {
-    MealType::by_id(&id)
-        .get_result(&*conn)
-        .map_err(|e| {
-            warn!("Unable to query meal type {}", e);
-            status::NotFound("Meal type not found")
-        })
-        .map(|r| Json(r))
+    id: Option<i32>,
+) -> Result<Json<Vec<MealType>>, status::NotFound<&'static str>> {
+    match id {
+        Some(id) => models::MealType::by_id(&id)
+            .get_results::<models::MealType>(&*conn)
+            .map_err(|e| {
+                warn!("Unable to query meal type {}", e);
+                status::NotFound("Meal type not found")
+            })
+            .map(|r| r.iter().map(|e| e.to_api()).collect())
+            .map(Json),
+
+        None => Ok(Json(
+            models::MealType::all()
+                .get_results::<models::MealType>(&*conn)
+                .expect("Unable to query meal types")
+                .iter()
+                .map(|e| e.to_api())
+                .collect::<Vec<MealType>>(),
+        )),
+    }
 }
 
 #[post("/", data = "<meal_type>")]
 pub fn create_meal_type(
     _user: User,
     conn: FodmapDbConn,
-    meal_type: Json<NewMealType>,
+    meal_type: Json<CreateMealType>,
 ) -> Result<status::Created<Json<MealType>>, status::Conflict<&'static str>> {
     diesel::insert_into(meal_types::table)
-        .values(meal_type.into_inner())
-        .get_result::<MealType>(&*conn)
-        .map(|r| status::Created(uri!(get_meal_type: r.id).to_string(), Some(Json(r))))
+        .values(models::NewMealType::from(meal_type.into_inner()))
+        .get_result::<models::MealType>(&*conn)
+        .map(|r| r.to_api())
+        .map(Json)
+        .map(|r| status::Created(uri!(get_meal_type: r.id).to_string(), Some(r)))
         .map_err(|e| {
             warn!("Unable to insert meal type: {}", e);
             status::Conflict(Some("Meal type already exists"))
@@ -49,20 +56,21 @@ pub fn update_meal_type(
     _user: User,
     conn: FodmapDbConn,
     id: i32,
-    update: Json<NewMealType>,
+    update: Json<CreateMealType>,
 ) -> Result<Json<MealType>, status::NotFound<&'static str>> {
-    MealType::by_id(&id)
-        .get_result::<MealType>(&*conn)
+    models::MealType::by_id(&id)
+        .get_result::<models::MealType>(&*conn)
         .map_err(|e| {
             warn!("Unable to query meal type: {}", e);
             status::NotFound("Meal type not found")
         })
-        .and_then(|meal_type| {
-            Ok(diesel::update(&meal_type)
-                .set(update.into_inner())
-                .get_result(&*conn)
-                .map(|r| Json(r))
-                .expect("Unable to update meal type"))
+        .map(|meal_type| {
+            diesel::update(&meal_type)
+                .set(models::NewMealType::from(update.into_inner()))
+                .get_result::<models::MealType>(&*conn)
+                .map(|r| r.to_api())
+                .map(Json)
+                .expect("Unable to update meal type")
         })
 }
 
@@ -72,7 +80,7 @@ pub fn delete_meal_type(
     conn: FodmapDbConn,
     id: i32,
 ) -> Result<status::NoContent, status::Conflict<&'static str>> {
-    match MealType::by_id(&id).get_result::<MealType>(&*conn) {
+    match models::MealType::by_id(&id).get_result::<models::MealType>(&*conn) {
         Ok(meal_type) => diesel::delete(&meal_type)
             .execute(&*conn)
             .map(|_| status::NoContent)
