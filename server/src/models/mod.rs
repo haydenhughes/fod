@@ -7,7 +7,7 @@ mod user;
 use diesel::dsl::Select;
 use diesel::query_source::Table;
 pub use entry::{Entry, NewEntry};
-pub use food::Food;
+pub use food::{Food, NewFood};
 pub use meal::Meal;
 pub use meal_type::{MealType, NewMealType};
 pub use user::{NewUser, User};
