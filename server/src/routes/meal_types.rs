@@ -17,7 +17,7 @@ pub fn get_meal_type(
             .get_results::<models::MealType>(&*conn)
             .map_err(|e| {
                 warn!("Unable to query meal type {}", e);
-                status::NotFound("Meal type not found")
+                status::NotFound("The queried meal type does not exist")
             })
             .map(|r| r.iter().map(|e| e.to_api()).collect())
             .map(Json),
@@ -91,7 +91,7 @@ pub fn delete_meal_type(
                 ))
             }),
         Err(e) => {
-            warn!("Unable to query meal_type: {}", e);
+            warn!("Unable to query meal type: {}", e);
             Ok(status::NoContent)
         }
     }
