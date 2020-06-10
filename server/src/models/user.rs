@@ -41,6 +41,8 @@ impl From<Session> for NewUser {
     }
 }
 
+/// When used as a rocket request guard, the User model will check to see if the current request
+/// is authenticated.
 #[derive(Identifiable, Queryable)]
 pub struct User {
     pub id: i32,
