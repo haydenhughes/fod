@@ -2,8 +2,7 @@ use super::All;
 use crate::schema::meal_types;
 use diesel::dsl::{Eq, Filter};
 use diesel::prelude::*;
-use fodmap_common::CreateMealType as ApiNewMealType;
-use fodmap_common::MealType as ApiMealType;
+use fodmap_common::{CreateMealType as ApiNewMealType, MealType as ApiMealType};
 
 type WithID<'a> = Eq<meal_types::id, &'a i32>;
 type ByID<'a> = Filter<All<meal_types::table>, WithID<'a>>;
