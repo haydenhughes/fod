@@ -1,9 +1,13 @@
+//! # FodMap Client
+//!
+//! A web assembly frontend for the FodMap API.
+
 #[macro_use]
 extern crate seed;
 
 mod components;
-mod models;
 mod pages;
+mod subpages;
 
 use seed::prelude::*;
 
