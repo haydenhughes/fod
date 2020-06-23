@@ -43,6 +43,7 @@ pub fn view(model: &Model) -> Node<Msg> {
             div![
                 class!["box"],
                 h1![class!["title"], "Hunger Level Scale"],
+                p!["The hunger level scale is a way of quantifying hunger."],
                 table![
                     class!["table", "is-hoverable"],
                     thead![tr![th!["Rating"], th!["Physical Sensation"]]],
@@ -56,7 +57,7 @@ pub fn view(model: &Model) -> Node<Msg> {
                         ]
                     })]
                 ],
-                p![strong!["Note:"], " the green ratings is the ideal zone"]
+                p![strong!["Note:"], " the highlighted ratings are the ideal zone; Where you should aim to be most of the time."]
             ]
         ],
         button![
