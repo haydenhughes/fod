@@ -37,7 +37,7 @@ pub fn view(model: &Model) -> Node<Msg> {
             "is-active" => model.is_active
 
         ],
-        div![class!["modal-background"]],
+        div![class!["modal-background"], simple_ev(Ev::Click, Msg::Toggle)],
         div![
             class!["modal-content"],
             div![
