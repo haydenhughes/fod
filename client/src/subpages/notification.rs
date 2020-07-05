@@ -1,30 +1,19 @@
 mod components;
 
-use fodmap_common::Session;
-use crate::Urls;
+use crate::models::Session;
 use seed::prelude::*;
 
+#[derive(Clone)]
 pub struct Model {
-    base_url: Url,
-    user_name: String,
-    password: String,
-    is_valid: bool,
+    text: String,
+
+    // The a bulma color helper class
+    color: String,
 }
 
 #[derive(Clone)]
 pub enum Msg {
-    // Inputs
-    UserNameChanged(String),
-    PasswordChanged(String),
-
-    // Buttons
-    LoginClicked,
-    ResetClicked,
-    DeleteNotification,
-
-    // Server interactions
-    LoginSucceded,
-    LoginFailed,
+    DeleteClicked,
 }
 
 pub fn init(url: Url) -> Model {
@@ -47,8 +36,8 @@ pub fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
             let request = Request::new("/api/auth/sessions")
                 .method(Method::Post)
                 .json(&Session {
-                    name: model.user_name.to_owned(),
-                    password: model.password.to_owned(),
+                    name: &model.user_name,
+                    password: &model.password,
                 })
                 .expect("Unable to serialize data");
 
@@ -66,24 +55,14 @@ pub fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
             model.user_name = String::default();
             model.password = String::default();
         }
-        Msg::DeleteNotification => model.is_valid = true,
 
-        Msg::LoginSucceded => Urls::new(&model.base_url).home().go_and_load(),
+        Msg::LoginSucceded => log!("Logged in"),
         Msg::LoginFailed => model.is_valid = false,
     }
 }
 
 pub fn view(model: &Model) -> Node<Msg> {
     section![
-        if !model.is_valid {
-            crate::components::notification(
-                "Invalid user name or password",
-                "is-danger",
-                Msg::DeleteNotification,
-            )
-        } else {
-            empty![]
-        },
         class!["hero", "is-fullheight"],
         div![
             class!["hero-body"],

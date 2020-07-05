@@ -36,3 +36,35 @@ pub fn notification<Msg: 'static + Clone>(text: &str, class: &str, on_delete: Ms
         text
     ]
 }
+
+pub fn nav<Msg>(base_url: &Url) -> Node<Msg> {
+
+    nav![
+        class!["navbar"],
+        attrs! {
+            At::AriaRoleDescription => "navigation",
+            At::AriaLabel => "main navigation",
+        },
+        div![
+            class!["navbar-brand"],
+            a![class!["navbar-item"], attrs! { At::Href => "/" }, "Fodmap"],
+        ],
+        div![
+            class!["navbar-menu"],
+            div![
+                class!["navbar-start"],
+                a![
+                    class!["navbar-item"],
+                    "Metrics"
+                ],
+            ],
+            div![
+                class!["navbar-end"],
+                button![
+                    class!["navbar-item", "button", "is-outlined", "is-warning", "is-inverted"],
+                    "Logout"
+                ]
+            ]
+        ]
+    ]
+}

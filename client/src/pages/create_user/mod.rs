@@ -4,7 +4,6 @@ use fodmap_common::Session;
 use crate::Urls;
 use seed::prelude::*;
 
-#[derive(Clone)]
 pub struct Model {
     base_url: Url,
     user_name: String,
@@ -16,8 +15,8 @@ pub struct Model {
 impl Model {
     pub fn to_session(&self) -> Session {
         Session {
-            name: self.user_name,
-            password: self.password,
+            name: self.user_name.to_owned(),
+            password: self.password.to_owned(),
         }
     }
 }
@@ -65,6 +64,8 @@ pub fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
             model.password = String::default()
         }
         Msg::CreateClicked => {
+            orders.skip();
+
             if model.is_verified
                 && model.user_name != String::default()
                 && model.password != String::default()
@@ -80,7 +81,7 @@ pub fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
                     Msg::UserCreated(
                         fetch(request)
                             .await
-                            .expect("Create user HTTP request failed")
+                            .expect("Unable to create use")
                             .status(),
                     )
                 });

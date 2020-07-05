@@ -1,80 +1,55 @@
-use crate::models::{Entry, MealType, NewEntry, NewMealType, User};
+use crate::models::{self, User};
 use crate::schema::{entries, meal_types};
 use crate::FodmapDbConn;
 use diesel::prelude::*;
-use fodmap_common::CreateEntry;
+use fodmap_common::{CreateEntry, Entry, Food};
 use rocket::response::status;
 use rocket_contrib::json::Json;
-
-/// Creates a NewEntry from a CreateEntry
-///
-/// This function handles getting a MealType id from the given meal type string. If a meal type
-/// with the required name doesn't exist yet, it'll create one.
-fn create_new_entry(user: &User, conn: &PgConnection, entry: &Json<CreateEntry>) -> NewEntry {
-    NewEntry {
-        user_id: user.id,
-        meal_type_id: {
-            if let Ok(meal_type) = MealType::by_name(&entry.meal_type).get_result::<MealType>(conn)
-            {
-                meal_type.id
-            } else {
-                diesel::insert_into(meal_types::table)
-                    .values(NewMealType {
-                        name: entry.meal_type.to_owned(),
-                    })
-                    .get_result::<MealType>(conn)
-                    .expect("Unable to create meal type")
-                    .id
-            }
-        },
-        timestamp: entry.timestamp,
-        comments: entry.comments.to_owned(),
-    }
-}
-
-#[get("/<page>?<page_size>")]
-pub fn list_entries(
-    user: User,
-    conn: FodmapDbConn,
-    page: i64,
-    page_size: Option<i64>,
-) -> Json<Vec<Entry>> {
-    Entry::belonging_to(&user)
-        .order(entries::timestamp.desc())
-        .offset(page * page_size.unwrap_or(20))
-        .limit(page_size.unwrap_or(20))
-        .get_results::<Entry>(&*conn)
-        .map(|r| Json(r))
-        .expect("Unable to query entries")
-}
 
 #[get("/<id>")]
 pub fn get_entry(
     _user: User,
     conn: FodmapDbConn,
-    id: i32,
-) -> Result<Json<Entry>, status::NotFound<&'static str>> {
-    Entry::by_id(&id)
-        .get_result(&*conn)
-        .map(|r| Json(r))
-        .map_err(|e| {
-            warn!("Unable to query entry: {}", e);
-            status::NotFound("Entry not found")
-        })
+    id: Option<i32>,
+) -> Result<Json<Vec<Entry>>, status::NotFound<&'static str>> {
+    match id {
+        Some(id) => models::Entry::by_id(&id)
+            .get_results::<models::Entry>(&*conn)
+            .map(|r| r.iter().map(|e| e.to_api(&*conn)).collect())
+            .map(Json)
+            .map_err(|e| {
+                warn!("Unable to query entry: {}", e);
+                status::NotFound("Entry not found")
+            }),
+        None => Ok(Json(
+            models::Entry::all()
+                .get_results::<models::Entry>(&*conn)
+                .expect("Unable to query entries")
+                .iter()
+                .map(|e| e.to_api(&*conn))
+                .collect(),
+        )),
+    }
 }
 
-#[post("/", data = "<entry>")]
+#[post("/", data = "<content>")]
 pub fn create_entry(
     user: User,
     conn: FodmapDbConn,
-    entry: Json<CreateEntry>,
-) -> status::Created<Json<Entry>> {
+    content: Json<CreateEntry>,
+) -> Result<status::Created<Json<Entry>>, status::BadRequest<&'static str>> {
+    // TODO: Create meals
+
     diesel::insert_into(entries::table)
-        .values(create_new_entry(&user, &*conn, &entry))
-        .get_result::<Entry>(&*conn)
-        .map(|r| Json(r))
-        .map(|r| status::Created(uri!(get_entry: r.id).to_string(), Some(r)))
-        .expect("Unable to create entry")
+        .values(models::NewEntry::from((user, content.into_inner())))
+        .get_result::<models::Entry>(&*conn)
+        .map(|e| e.to_api(&*conn))
+        .map(Json)
+        .map(|e| status::Created(uri!(get_entry: e.id).to_string(), Some(e)))
+        .map_err(|e| {
+            warn!("Unable to insert entry: {}", e);
+            status::BadRequest(Some("Unable to create entry, is the "))
+        })
 }
 
 #[put("/<id>", data = "<entry>")]
@@ -82,7 +57,7 @@ pub fn update_entry(
     user: User,
     conn: FodmapDbConn,
     id: i32,
-    entry: Json<CreateEntry>,
+    entry: Json<Entry>,
 ) -> Result<Json<Entry>, status::NotFound<&'static str>> {
     Entry::belonging_to(&user)
         .filter(Entry::with_id(&id))
@@ -93,7 +68,7 @@ pub fn update_entry(
         })
         .and_then(|e| {
             Ok(diesel::update(&e)
-                .set(create_new_entry(&user, &*conn, &entry))
+                .set(to_new_entry(&user, &*conn, &entry))
                 .get_result::<Entry>(&*conn)
                 .map(|r| Json(r))
                 .expect("Unable to update entry"))
