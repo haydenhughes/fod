@@ -53,6 +53,8 @@ pub struct Entry {
 pub struct CreateEntry {
     pub meal_type: MealType,
     pub timestamp: NaiveDateTime,
+    pub hunger_before: i32,
+    pub hunger_after: i32,
     pub foods: Vec<Food>,
     pub comments: Option<String>
 }

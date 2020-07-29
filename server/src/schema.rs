@@ -3,6 +3,8 @@ table! {
         id -> Int4,
         user_id -> Int4,
         meal_type_id -> Int4,
+        hunger_before -> Int4,
+        hunger_after -> Int4,
         timestamp -> Timestamp,
         comments -> Nullable<Varchar>,
     }
