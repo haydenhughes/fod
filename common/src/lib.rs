@@ -58,3 +58,13 @@ pub struct CreateEntry {
     pub foods: Vec<Food>,
     pub comments: Option<String>
 }
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct UpdateEntry {
+    pub meal_type: Option<MealType>,
+    pub timestamp: Option<NaiveDateTime>,
+    pub hunger_before: Option<i32>,
+    pub hunger_after: Option<i32>,
+    pub foods: Option<Vec<Food>>,
+    pub comments: Option<String>,
+}
