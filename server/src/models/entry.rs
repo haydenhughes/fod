@@ -25,14 +25,14 @@ pub struct NewEntry {
 }
 
 impl NewEntry {
-    fn new(user: User, entry: ApiNewEntry) -> Self {
+    pub fn new(user: User, entry: ApiNewEntry) -> Self {
         Self {
             user_id: user.id,
             meal_type_id: entry.meal_type.id,
             hunger_before: entry.hunger_before,
             hunger_after: entry.hunger_after,
             timestamp: entry.timestamp,
-            comments: entry.comments
+            comments: entry.comments,
         }
     }
 }
@@ -71,10 +71,7 @@ impl Entry {
         Self::all().filter(Self::with_user(user))
     }
 
-    pub fn to_api(
-        &self,
-        conn: &PgConnection,
-    ) -> ApiEntry {
+    pub fn to_api(&self, conn: &PgConnection) -> ApiEntry {
         let meal_type = MealType::by_id(&self.meal_type_id)
             .get_result::<MealType>(conn)
             .expect("Unable to query meal type")
