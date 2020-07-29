@@ -18,17 +18,21 @@ type ByUser<'a> = Filter<All<entries::table>, WithUser<'a>>;
 pub struct NewEntry {
     user_id: i32,
     meal_type_id: i32,
+    hunger_before: i32,
+    hunger_after: i32,
     timestamp: NaiveDateTime,
     comments: Option<String>,
 }
 
-impl From<(User, ApiNewEntry)> for NewEntry {
-    fn from(other: (User, ApiNewEntry)) -> Self {
+impl NewEntry {
+    fn new(user: User, entry: ApiNewEntry) -> Self {
         Self {
-            user_id: other.0.id,
-            meal_type_id: other.1.meal_type.id,
-            timestamp: other.1.timestamp,
-            comments: other.1.comments,
+            user_id: user.id,
+            meal_type_id: entry.meal_type.id,
+            hunger_before: entry.hunger_before,
+            hunger_after: entry.hunger_after,
+            timestamp: entry.timestamp,
+            comments: entry.comments
         }
     }
 }
@@ -40,6 +44,8 @@ pub struct Entry {
     pub id: i32,
     pub user_id: i32,
     pub meal_type_id: i32,
+    pub hunger_before: i32,
+    pub hunger_after: i32,
     pub timestamp: NaiveDateTime,
     pub comments: Option<String>,
 }
@@ -87,9 +93,11 @@ impl Entry {
 
         ApiEntry {
             id: self.id,
-            meal_type: meal_type,
+            meal_type,
+            hunger_before: self.hunger_before,
+            hunger_after: self.hunger_after,
             timestamp: self.timestamp,
-            foods: foods,
+            foods,
             comments: self.comments,
         }
     }

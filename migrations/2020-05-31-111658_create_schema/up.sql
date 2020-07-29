@@ -19,6 +19,8 @@ CREATE TABLE entries (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users (id) ON DELETE CASCADE NOT NULL,
   meal_type_id INTEGER REFERENCES meal_types (id) ON DELETE CASCADE NOT NULL,
+  hunger_before INTEGER NOT NULL,
+  hunger_after INTEGER NOT NULL,
   timestamp TIMESTAMP NOT NULL,
   comments VARCHAR
 );

@@ -41,7 +41,7 @@ pub fn create_entry(
     // TODO: Create meals
 
     diesel::insert_into(entries::table)
-        .values(models::NewEntry::from((user, content.into_inner())))
+        .values(models::NewEntry::new(user, content.into_inner()))
         .get_result::<models::Entry>(&*conn)
         .map(|e| e.to_api(&*conn))
         .map(Json)
