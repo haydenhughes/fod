@@ -27,6 +27,11 @@ pub struct CreateMealType {
 }
 
 #[derive(Serialize, Deserialize, Clone)]
+pub struct UpdateMealType {
+    pub name: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Food {
     pub id: i32,
     pub name: String,
@@ -34,8 +39,12 @@ pub struct Food {
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct CreateFood {
-    pub id: i32,
     pub name: String,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct UpdateFood {
+    pub name: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
