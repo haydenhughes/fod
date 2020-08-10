@@ -16,5 +16,5 @@ chrono = { version = "0.4", features = ["serde"] }
 bcrypt = "0.8.0"
 clap = "2.33.0"
 dotenv = "0.15.0"
-rpassword = "4.0.5"
+rpassword = "5.0.0"
 human-panic = "1.0.3"
